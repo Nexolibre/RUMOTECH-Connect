@@ -181,10 +181,28 @@
   table.mods input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
   table.mods tr.dim td:first-child{color:var(--ink-faint)}
   table.params{margin-top:2px}
-  table.params input{width:66px}
+  table.params input{width:56px}
   table.params td:first-child{font-size:12.5px}
   table.params tr.active td{background:var(--accent-soft)}
   table.params tr.active td:first-child{color:var(--accent-2);font-weight:750}
+  .chips-sel{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+  .chips-sel label{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:5px 10px;border:1px solid var(--line);border-radius:100px;background:var(--surface-2);color:var(--ink-soft);cursor:pointer;user-select:none}
+  .chips-sel label.on{background:var(--accent-soft);border-color:transparent;color:var(--accent-2)}
+  .chips-sel input{accent-color:var(--accent);margin:0}
+  .seg{display:inline-flex;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:3px;margin:2px 0 12px}
+  .seg button{border:none;background:transparent;color:var(--ink-soft);font-family:var(--sans);font-size:12.5px;font-weight:650;padding:6px 12px;border-radius:8px;cursor:pointer}
+  .seg button.active{background:var(--surface);color:var(--accent-2);box-shadow:var(--shadow)}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .patient-box{margin-top:6px;padding-top:12px;border-top:1px dashed var(--line)}
+  .explain{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 16px;box-shadow:var(--shadow)}
+  .explain summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent-2);padding:12px 0;list-style:none}
+  .explain summary::-webkit-details-marker{display:none}
+  .explain summary::before{content:"▸  ";color:var(--ink-faint)}
+  .explain[open] summary::before{content:"▾  "}
+  .explain dl{margin:0 0 12px;display:grid;grid-template-columns:minmax(140px,auto) 1fr;gap:6px 16px;font-size:12.5px}
+  .explain dt{font-weight:700;color:var(--ink)}
+  .explain dd{margin:0;color:var(--ink-soft);line-height:1.45}
+  [hidden]{display:none!important}
 
   /* output */
   .out{position:sticky;top:0;display:flex;flex-direction:column;gap:14px}
@@ -419,7 +437,8 @@
           <!-- controles -->
           <div style="display:flex;flex-direction:column;gap:16px">
             <div class="panel">
-              <h4><span class="n">A</span> Parámetros por país</h4>
+              <h4><span class="n">A</span> Parámetros impositivos por país</h4>
+              <div class="chips-sel" id="countrySel"></div>
               <div class="two">
                 <div class="field">
                   <label for="pais">País a simular</label>
@@ -431,18 +450,33 @@
                 <div class="field"><label for="costofijo">Costo fijo Rumotech (USD/mod/sede/mes)</label><input id="costofijo" type="number" step="5" min="0" value="100"></div>
               </div>
               <table class="mods params">
-                <thead><tr><th>País</th><th>Costo/prestación</th><th>IVA&nbsp;%</th><th>Renta&nbsp;%</th></tr></thead>
+                <thead><tr><th>País</th><th>Costo/prest.</th><th>IVA&nbsp;%</th><th>IIBB&nbsp;%</th><th>Renta&nbsp;%</th></tr></thead>
                 <tbody id="paramsBody"></tbody>
               </table>
-              <span class="hint">Editá el costo por prestación (precio/estudio) y el IVA de cada país. La fila resaltada es la que se simula. El costo fijo de Rumotech es la palanca de negociación (por modalidad y sede, no por equipo).</span>
+              <span class="hint">Marcá con los chips los países del ejercicio. Editá el costo por prestación, el IVA, los Ingresos Brutos (IIBB, impuesto provincial de Argentina) y el impuesto a la renta de cada uno. La fila resaltada es la que se simula.</span>
             </div>
             <div class="panel">
               <h4><span class="n">B</span> Configuración del cliente</h4>
-              <div class="field inline"><label for="sedes">Número de sedes</label><input id="sedes" type="number" min="1" step="1" value="5"></div>
+              <div class="two">
+                <div class="field"><label for="sedes">Número de sedes</label><input id="sedes" type="number" min="1" step="1" value="5"></div>
+                <div class="field"><label for="rmplan">Plan para RM</label><select id="rmplan"><option value="saas">SaaS Full + Cryogenics</option><option value="ebox">EBOX Full</option></select></div>
+              </div>
+              <div class="field" id="eboxNote" hidden><label for="eboxAnual">EBOX Full — costo anual por resonador (USD)</label><input id="eboxAnual" type="number" step="500" min="0" value="10000"><span class="hint">Con EBOX, el costo de RM es por resonador (no por sede).</span></div>
+              <div class="seg" id="volMethod">
+                <button type="button" data-m="equipos" class="active">Volumen por equipos</button>
+                <button type="button" data-m="pacientes">Volumen por pacientes</button>
+              </div>
               <table class="mods">
                 <thead><tr><th>Modalidad</th><th>Equipos/sede</th><th>Estudios/equipo/mes</th></tr></thead>
                 <tbody id="modsBody"></tbody>
               </table>
+              <div id="patientBox" class="patient-box" hidden>
+                <div class="two">
+                  <div class="field"><label for="pac">Pacientes/mes por sede</label><input id="pac" type="number" min="0" step="10" value="900"></div>
+                  <div class="field"><label for="coef">Coef. exámenes/paciente</label><input id="coef" type="number" min="0" step="0.05" value="1.3"></div>
+                </div>
+                <span class="hint">Prestaciones por sede = pacientes × coeficiente = <b id="prestSede">—</b>. En este modo se ignora «Estudios/equipo/mes»; los equipos siguen definiendo las modalidades activas y el costo.</span>
+              </div>
             </div>
           </div>
           <!-- resultados -->
@@ -458,20 +492,37 @@
             </div>
             <div class="kpis">
               <div class="kpi"><div class="k">Costo Rumotech / mes</div><div class="v sm" id="oCosto">—</div></div>
-              <div class="kpi"><div class="k">Volumen / mes</div><div class="v sm" id="oVol">—</div></div>
+              <div class="kpi"><div class="k">Prestaciones / mes</div><div class="v sm" id="oVol">—</div></div>
               <div class="kpi"><div class="k">Ingreso neto / mes</div><div class="v sm" id="oIng">—</div></div>
-              <div class="kpi"><div class="k">Múltiplo ingreso÷costo</div><div class="v sm" id="oMult">—</div></div>
+              <div class="kpi"><div class="k">Ing. Brutos (IIBB) / mes</div><div class="v sm" id="oIIBB">—</div></div>
+              <div class="kpi"><div class="k">Imp. renta / mes</div><div class="v sm" id="oRenta">—</div></div>
+              <div class="kpi"><div class="k">Hardware (pago único)</div><div class="v sm" id="oHW">—</div></div>
               <div class="kpi"><div class="k">IVA aplicado</div><div class="v sm" id="oIva">—</div></div>
               <div class="kpi"><div class="k">Precio final c/IVA</div><div class="v sm" id="oPreIva">—</div></div>
             </div>
             <div class="spread">
-              <div class="row"><span>Costo efectivo / estudio <b class="mono" id="oCef">—</b></span><span>Precio venta <b class="mono" id="oPre">—</b></span></div>
+              <div class="row"><span>Costo efectivo / prestación <b class="mono" id="oCef">—</b></span><span>Precio neto <b class="mono" id="oPre">—</b></span></div>
               <div class="bar"><div class="cost" id="barCost"></div><div class="price-mark" id="barPrice"></div></div>
-              <div class="lg"><span><i style="background:var(--bad)"></i>costo por estudio</span><span><i style="background:var(--good)"></i>precio de venta</span></div>
+              <div class="lg"><span><i style="background:var(--bad)"></i>costo por prestación</span><span><i style="background:var(--good)"></i>precio de venta</span></div>
             </div>
           </div>
         </div>
-        <p class="foot-note">El IVA se muestra como precio final al cliente pero es pass-through (neutro para NexoLibre registrado); la renta neta se calcula sobre el precio neto y el impuesto a la renta. Estudios/equipo/mes por defecto son estimaciones editables (RM 500, CT 700, US 1.000, RX 1.200, MG 300).</p>
+        <details class="explain">
+          <summary>¿Qué representa cada valor y cómo se calcula?</summary>
+          <dl>
+            <dt>Prestaciones / mes</dt><dd>Estudios facturables. Por equipos = Σ (equipos × estudios/equipo/mes); por pacientes = pacientes × coeficiente. Todo × número de sedes.</dd>
+            <dt>Costo Rumotech / mes</dt><dd>Lo que Rumotech nos cobra. Cada modalidad activa (incl. RM con SaaS+Cryo) = costo fijo × sedes. RM con EBOX = (costo anual EBOX ÷ 12) × resonadores × sedes (por equipo).</dd>
+            <dt>Ingreso neto / mes</dt><dd>Prestaciones × precio por prestación (neto de IVA).</dd>
+            <dt>IVA aplicado · Precio final c/IVA</dt><dd>El IVA se factura al cliente sobre el precio (precio × (1 + IVA)) y se traslada al fisco: es neutro para nuestra renta.</dd>
+            <dt>Ingresos Brutos (IIBB)</dt><dd>Impuesto provincial argentino sobre el ingreso bruto. Se resta del margen: ingreso × IIBB %. En los demás países es 0.</dd>
+            <dt>Imp. a la renta / mes</dt><dd>Sobre la ganancia después de costos e IIBB: margen operativo × alícuota del país.</dd>
+            <dt>Renta neta anual</dt><dd>(Ingreso − costo Rumotech − IIBB − impuesto a la renta) × 12. Es la renta pasiva que retiene NexoLibre.</dd>
+            <dt>Hardware (pago único)</dt><dd>Costo único por resonador: SaaS+Cryo USD 150, EBOX USD 500. No entra en la renta recurrente.</dd>
+            <dt>Costo efectivo / prestación</dt><dd>Costo Rumotech ÷ prestaciones. Baja al sumar equipos o sedes: la densidad compensa precios bajos.</dd>
+            <dt>Múltiplo ingreso÷costo</dt><dd>Cuántas veces el ingreso cubre el costo de Rumotech (aparece junto a la renta mensual).</dd>
+          </dl>
+        </details>
+        <p class="foot-note">Modelo espejo de la hoja «Calculadora» del Excel. Tasas y coeficientes por defecto son estimaciones editables; validar con datos reales. El IVA es pass-through; IIBB y el impuesto a la renta sí reducen la renta.</p>
       </div>
     </section>
 
@@ -575,9 +626,13 @@
   /* ---------- calculadora ---------- */
   var ORDER=["Chile","Uruguay","Argentina","Colombia","USA"];
   var COUNTRY={
-    Chile:{price:1.20,iva:19,tax:27}, Uruguay:{price:1.00,iva:22,tax:25},
-    Argentina:{price:0.40,iva:21,tax:35}, Colombia:{price:0.60,iva:19,tax:35}, USA:{price:2.00,iva:0,tax:21}
+    Chile:{price:1.20,iva:19,iibb:0,tax:27},
+    Uruguay:{price:1.00,iva:22,iibb:0,tax:25},
+    Argentina:{price:0.40,iva:21,iibb:3,tax:35},
+    Colombia:{price:0.60,iva:19,iibb:0,tax:35},
+    USA:{price:2.00,iva:0,iibb:0,tax:21}
   };
+  var VISIBLE={Chile:true,Uruguay:true,Argentina:true,Colombia:true,USA:true};
   var MODS=[
     {k:"RM",n:"Resonancia (RM)",eq:1,es:500},
     {k:"CT",n:"Tomografía (CT)",eq:1,es:700},
@@ -585,20 +640,28 @@
     {k:"RX",n:"Rayos X (RX)",eq:0,es:1200},
     {k:"MG",n:"Mamografía (MG)",eq:0,es:300}
   ];
+  var volMode="equipos";
   var $=function(id){return document.getElementById(id);};
   function num(id){var el=$(id);if(!el)return 0;var v=parseFloat(el.value);return isNaN(v)?0:v;}
+  function money(n){return "$"+Math.round(n).toLocaleString("es-ES");}
+  function money2(n){return "$"+n.toFixed(2).replace(".",",");}
 
-  document.getElementById("modsBody").innerHTML=MODS.map(function(m){
+  $("countrySel").innerHTML=ORDER.map(function(name){
+    return '<label id="chip-'+name+'" class="on"><input type="checkbox" id="chk-'+name+'" checked>'+name+'</label>';
+  }).join("");
+
+  $("modsBody").innerHTML=MODS.map(function(m){
     return '<tr id="row-'+m.k+'"><td>'+m.n+'</td>'+
       '<td><input type="number" min="0" step="1" id="eq-'+m.k+'" value="'+m.eq+'"></td>'+
       '<td><input type="number" min="0" step="10" id="es-'+m.k+'" value="'+m.es+'"></td></tr>';
   }).join("");
 
-  document.getElementById("paramsBody").innerHTML=ORDER.map(function(name){
+  $("paramsBody").innerHTML=ORDER.map(function(name){
     var c=COUNTRY[name];
     return '<tr id="prow-'+name+'"><td>'+name+'</td>'+
       '<td><input type="number" min="0" step="0.05" id="p-price-'+name+'" value="'+c.price.toFixed(2)+'"></td>'+
       '<td><input type="number" min="0" step="1" id="p-iva-'+name+'" value="'+c.iva+'"></td>'+
+      '<td><input type="number" min="0" step="0.5" id="p-iibb-'+name+'" value="'+c.iibb+'"></td>'+
       '<td><input type="number" min="0" step="1" id="p-tax-'+name+'" value="'+c.tax+'"></td></tr>';
   }).join("");
 
@@ -606,72 +669,118 @@
     ORDER.forEach(function(name){
       COUNTRY[name].price=num("p-price-"+name);
       COUNTRY[name].iva=num("p-iva-"+name);
+      COUNTRY[name].iibb=num("p-iibb-"+name);
       COUNTRY[name].tax=num("p-tax-"+name);
     });
   }
 
+  function rebuildPais(){
+    var sel=$("pais"), prev=sel.value;
+    var vis=ORDER.filter(function(n){return VISIBLE[n];});
+    if(vis.length===0){VISIBLE[prev]=true;$("chk-"+prev).checked=true;vis=[prev];}
+    if(vis.indexOf(prev)<0)prev=vis[0];
+    sel.innerHTML=vis.map(function(n){return '<option'+(n===prev?" selected":"")+'>'+n+'</option>';}).join("");
+    ORDER.forEach(function(n){
+      var r=$("prow-"+n); if(r) r.hidden=!VISIBLE[n];
+      var ch=$("chip-"+n); if(ch) ch.classList.toggle("on",VISIBLE[n]);
+    });
+  }
+
+  function updateUI(){
+    var ebox=$("rmplan").value==="ebox";
+    $("eboxNote").hidden=!ebox;
+    $("patientBox").hidden=(volMode!=="pacientes");
+    MODS.forEach(function(m){var e=$("es-"+m.k); if(e) e.style.opacity=(volMode==="pacientes")?"0.4":"1";});
+    Array.prototype.forEach.call($("volMethod").children,function(b){b.classList.toggle("active",b.getAttribute("data-m")===volMode);});
+  }
+
   function calc(){
     syncParams();
+    rebuildPais();
+    updateUI();
     var active=$("pais").value, c=COUNTRY[active];
-    var precio=c.price, iva=c.iva/100, tax=c.tax/100;
+    var precio=c.price, iva=c.iva/100, iibb=c.iibb/100, tax=c.tax/100;
     var cf=num("costofijo"), sedes=Math.max(0,num("sedes"));
-    var activas=0, volSede=0;
-    MODS.forEach(function(m){
-      var eq=num("eq-"+m.k), es=num("es-"+m.k);
-      if(eq>0){activas++; volSede+=eq*es;}
-      var row=$("row-"+m.k); if(row) row.classList.toggle("dim",eq<=0);
-    });
-    ORDER.forEach(function(name){var pr=$("prow-"+name); if(pr) pr.classList.toggle("active",name===active);});
+    var plan=$("rmplan").value, eboxAnual=num("eboxAnual");
 
-    var costoTot=activas*cf*sedes;
+    var activas=0, volEquipos=0, rmEq=0, costoSede=0;
+    MODS.forEach(function(m){
+      var eq=num("eq-"+m.k), es=num("es-"+m.k), on=eq>0;
+      if(on){ activas++; volEquipos+=eq*es; }
+      if(m.k==="RM") rmEq=eq;
+      if(on){
+        if(m.k==="RM" && plan==="ebox") costoSede += (eboxAnual/12)*eq;
+        else costoSede += cf;
+      }
+      var row=$("row-"+m.k); if(row) row.classList.toggle("dim",!on);
+    });
+    ORDER.forEach(function(n){var pr=$("prow-"+n); if(pr) pr.classList.toggle("active",n===active);});
+
+    var pac=num("pac"), coef=num("coef");
+    if(volMode==="pacientes"){var ps=$("prestSede"); if(ps) ps.textContent=Math.round(pac*coef).toLocaleString("es-ES")+" prest./sede";}
+    var volSede=(volMode==="pacientes")?pac*coef:volEquipos;
+
+    var costoTot=costoSede*sedes;
     var volTot=volSede*sedes;
     var ingreso=volTot*precio;
-    var margen=ingreso-costoTot;
-    var netaMes=margen*(1-tax);
+    var iibbAmt=ingreso*iibb;
+    var margenOper=ingreso-costoTot-iibbAmt;
+    var rentaImp=margenOper>0?margenOper*tax:0;
+    var netaMes=margenOper-rentaImp;
     var netaAnual=netaMes*12;
     var cef=volTot>0?costoTot/volTot:0;
     var mult=costoTot>0?ingreso/costoTot:0;
     var precioIva=precio*(1+iva);
+    var hwTot=(plan==="ebox"?500:150)*rmEq*sedes;
 
-    $("oAnual").textContent=(netaAnual<0?"–$":"$")+Math.abs(Math.round(netaAnual)).toLocaleString("es-ES");
-    $("oMensual").textContent=(netaMes<0?"–$":"$")+Math.abs(Math.round(netaMes)).toLocaleString("es-ES")+" / mes neto";
-    $("oCosto").textContent="$"+Math.round(costoTot).toLocaleString("es-ES");
+    $("oAnual").textContent=(netaAnual<0?"–":"")+money(Math.abs(netaAnual));
+    $("oMensual").textContent=(netaMes<0?"–":"")+money(Math.abs(netaMes))+" / mes · "+(mult>0?mult.toFixed(1):"0")+"x ingreso÷costo";
+    $("oCosto").textContent=money(costoTot);
     $("oVol").textContent=Math.round(volTot).toLocaleString("es-ES");
-    $("oIng").textContent="$"+Math.round(ingreso).toLocaleString("es-ES");
-    $("oMult").textContent=(mult>0?mult.toFixed(1):"0")+"x";
+    $("oIng").textContent=money(ingreso);
+    $("oIIBB").textContent=iibb>0?money(iibbAmt):"—";
+    $("oRenta").textContent=money(rentaImp);
+    $("oHW").textContent=money(hwTot);
     $("oIva").textContent=Math.round(c.iva)+"%";
-    $("oPreIva").textContent="$"+precioIva.toFixed(2).replace(".",",");
-    $("oCef").textContent="$"+cef.toFixed(2).replace(".",",");
-    $("oPre").textContent="$"+precio.toFixed(2).replace(".",",");
+    $("oPreIva").textContent=money2(precioIva);
+    $("oCef").textContent=money2(cef);
+    $("oPre").textContent=money2(precio);
 
-    var ratio=precio>0?Math.min(cef/precio,1.6):1.6;
-    $("barCost").style.width=Math.min(ratio,1)*100+"%";
+    var ratio=precio>0?Math.min(cef/precio,1):(cef>0?1:0);
+    $("barCost").style.width=(ratio*100)+"%";
     $("barPrice").style.left="calc(100% - 3px)";
-    $("barCost").style.background="var(--bad)";
 
     var v=$("verdict"), stt=$("vSt"), ds=$("vDs");
     v.classList.remove("good","warn","bad");
-    var marginPct=ingreso>0?margen/ingreso:-1;
+    var marginPct=ingreso>0?margenOper/ingreso:-1;
     if(volTot<=0||activas<=0){
       v.classList.add("bad"); stt.textContent="SIN CONFIGURAR";
-      ds.textContent="Agregá al menos una modalidad con equipos y volumen.";
-    }else if(margen<=0){
+      ds.textContent="Agregá al menos una modalidad activa con volumen (equipos o pacientes).";
+    }else if(margenOper<=0){
       v.classList.add("bad"); stt.textContent="NO RENTABLE";
-      ds.textContent="El precio no cubre el costo fijo: subí el precio, el volumen o negociá el costo.";
+      ds.textContent="El precio no cubre el costo"+(iibb>0?" e IIBB":"")+": subí el precio, el volumen o negociá el costo.";
     }else if(marginPct<0.30){
       v.classList.add("warn"); stt.textContent="MARGEN AJUSTADO";
       ds.textContent="Rentable pero fino ("+Math.round(marginPct*100)+"% de margen). Más equipos/sedes lo mejoran.";
     }else{
       v.classList.add("good"); stt.textContent="RENTABLE";
-      ds.textContent="Margen sólido ("+Math.round(marginPct*100)+"%). Costo efectivo $"+cef.toFixed(2).replace(".",",")+" vs precio neto $"+precio.toFixed(2).replace(".",",")+".";
+      ds.textContent="Margen sólido ("+Math.round(marginPct*100)+"%). Costo efectivo "+money2(cef)+" vs precio neto "+money2(precio)+".";
     }
   }
 
   $("pais").addEventListener("change",calc);
   $("costofijo").addEventListener("input",calc);
   $("sedes").addEventListener("input",calc);
-  ORDER.forEach(function(name){["p-price-","p-iva-","p-tax-"].forEach(function(pfx){$(pfx+name).addEventListener("input",calc);});});
+  $("rmplan").addEventListener("change",calc);
+  $("eboxAnual").addEventListener("input",calc);
+  $("pac").addEventListener("input",calc);
+  $("coef").addEventListener("input",calc);
+  ORDER.forEach(function(name){
+    ["p-price-","p-iva-","p-iibb-","p-tax-"].forEach(function(pfx){$(pfx+name).addEventListener("input",calc);});
+    $("chk-"+name).addEventListener("change",function(){VISIBLE[name]=this.checked;calc();});
+  });
   MODS.forEach(function(m){$("eq-"+m.k).addEventListener("input",calc);$("es-"+m.k).addEventListener("input",calc);});
+  Array.prototype.forEach.call($("volMethod").children,function(b){b.addEventListener("click",function(){volMode=b.getAttribute("data-m");calc();});});
   calc();
 })();
 </script>
