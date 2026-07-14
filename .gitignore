@@ -1,0 +1,6 @@
+# Office lock/temp files
+~$*
+# macOS
+.DS_Store
+# Node (por si se genera al construir documentos)
+node_modules/

@@ -1,0 +1,677 @@
+<meta charset="utf-8">
+<title>NexoLibre · Modelo de Comercialización — Presentación Interactiva</title>
+<style>
+  :root{
+    --ground:#EAEFF6; --surface:#FFFFFF; --surface-2:#F4F8FC; --surface-3:#EDF3FA;
+    --ink:#0F1E38; --ink-soft:#4B5B76; --ink-faint:#8394AE;
+    --line:#D3DCEA; --line-soft:#E3EAF4;
+    --brand:#1F3864; --brand-deep:#152743;
+    --accent:#0C9FB4; --accent-2:#0B7E93; --accent-soft:#DBF1F5;
+    --good:#12915B; --good-soft:#DCF3E8; --good-ink:#0B6B43;
+    --warn:#B9761A; --warn-soft:#FaF0DE;
+    --bad:#CE3A38; --bad-soft:#FBE3E2; --bad-ink:#A32220;
+    --shadow:0 1px 2px rgba(15,30,56,.06),0 8px 30px rgba(15,30,56,.08);
+    --shadow-lg:0 24px 60px rgba(15,30,56,.16);
+    --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --r:14px; --r-sm:9px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#0A1424; --surface:#111F39; --surface-2:#16274A; --surface-3:#1B2E54;
+      --ink:#E9F0FA; --ink-soft:#A6B7D3; --ink-faint:#6E82A5;
+      --line:#26375A; --line-soft:#1D2C49;
+      --brand:#3358A0; --brand-deep:#0E1B33;
+      --accent:#25C2D8; --accent-2:#4AD3E6; --accent-soft:#0F3540;
+      --good:#37C784; --good-soft:#0E3327; --good-ink:#6FE4AF;
+      --warn:#E0A64A; --warn-soft:#33280F;
+      --bad:#EB5C57; --bad-soft:#3A1C1B; --bad-ink:#F4938F;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px rgba(0,0,0,.34);
+      --shadow-lg:0 24px 60px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="light"]{
+    --ground:#EAEFF6; --surface:#FFFFFF; --surface-2:#F4F8FC; --surface-3:#EDF3FA;
+    --ink:#0F1E38; --ink-soft:#4B5B76; --ink-faint:#8394AE; --line:#D3DCEA; --line-soft:#E3EAF4;
+    --brand:#1F3864; --brand-deep:#152743; --accent:#0C9FB4; --accent-2:#0B7E93; --accent-soft:#DBF1F5;
+    --good:#12915B; --good-soft:#DCF3E8; --good-ink:#0B6B43; --warn:#B9761A; --warn-soft:#FAF0DE;
+    --bad:#CE3A38; --bad-soft:#FBE3E2; --bad-ink:#A32220;
+    --shadow:0 1px 2px rgba(15,30,56,.06),0 8px 30px rgba(15,30,56,.08); --shadow-lg:0 24px 60px rgba(15,30,56,.16);
+  }
+  :root[data-theme="dark"]{
+    --ground:#0A1424; --surface:#111F39; --surface-2:#16274A; --surface-3:#1B2E54;
+    --ink:#E9F0FA; --ink-soft:#A6B7D3; --ink-faint:#6E82A5; --line:#26375A; --line-soft:#1D2C49;
+    --brand:#3358A0; --brand-deep:#0E1B33; --accent:#25C2D8; --accent-2:#4AD3E6; --accent-soft:#0F3540;
+    --good:#37C784; --good-soft:#0E3327; --good-ink:#6FE4AF; --warn:#E0A64A; --warn-soft:#33280F;
+    --bad:#EB5C57; --bad-soft:#3A1C1B; --bad-ink:#F4938F;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px rgba(0,0,0,.34); --shadow-lg:0 24px 60px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--ground);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;line-height:1.5;overflow:hidden;
+  }
+  h1,h2,h3,h4{margin:0;text-wrap:balance;letter-spacing:-.02em;line-height:1.08}
+  p{margin:0}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  /* ---------- shell ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;height:54px;z-index:50;
+    display:flex;align-items:center;gap:14px;padding:0 20px;
+    background:color-mix(in srgb,var(--surface) 82%,transparent);
+    backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line-soft);
+  }
+  .brand-lockup{display:flex;align-items:center;gap:9px;font-weight:700;font-size:13px;letter-spacing:.02em}
+  .brand-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .brand-lockup .x{color:var(--ink-faint);font-weight:500}
+  .topbar .spacer{flex:1}
+  .prog{position:absolute;left:0;bottom:-1px;height:2px;background:var(--accent);transition:width .4s cubic-bezier(.4,0,.2,1)}
+  .counter{font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .tbtn{
+    display:inline-flex;align-items:center;justify-content:center;height:32px;min-width:32px;padding:0 10px;
+    border:1px solid var(--line);background:var(--surface-2);color:var(--ink-soft);border-radius:8px;
+    cursor:pointer;font-size:13px;font-family:var(--sans)}
+  .tbtn:hover{border-color:var(--accent);color:var(--ink)}
+  .tbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .stage{position:fixed;inset:54px 0 0 0;overflow:hidden}
+  .track{display:flex;height:100%;transition:transform .55s cubic-bezier(.5,.05,.2,1)}
+  .slide{flex:0 0 100%;height:100%;overflow-y:auto;padding:clamp(24px,4vw,64px)}
+  .slide-inner{max-width:1080px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:22px;padding-bottom:64px}
+  .slide[data-wide] .slide-inner{max-width:1180px}
+
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2);display:flex;align-items:center;gap:9px}
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px}
+  .slide h2{font-size:clamp(26px,3.6vw,42px);font-weight:800}
+  .lede{font-size:clamp(16px,1.5vw,19px);color:var(--ink-soft);max-width:64ch}
+
+  /* ---------- cover ---------- */
+  .cover{position:relative}
+  .cover-grid{position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+    background-size:46px 46px;mask-image:radial-gradient(120% 90% at 80% 10%,#000 20%,transparent 72%)}
+  .cover .slide-inner{gap:14px}
+  .cover-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--ink-faint);text-transform:uppercase}
+  .cover h1{font-size:clamp(34px,6.4vw,74px);font-weight:800;letter-spacing:-.035em}
+  .cover h1 .hl{color:var(--accent-2)}
+  .cover .sub{font-size:clamp(17px,2vw,22px);color:var(--ink-soft);max-width:52ch}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:100px;background:var(--surface);border:1px solid var(--line);color:var(--ink-soft)}
+  .chip.mk{background:var(--accent-soft);border-color:transparent;color:var(--accent-2)}
+  .cover-meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:22px;font-size:13.5px;color:var(--ink-soft)}
+  .cover-meta b{color:var(--ink);font-weight:700}
+  .navhint{margin-top:20px;font-family:var(--mono);font-size:12.5px;color:var(--ink-faint)}
+  .navhint kbd{font-family:var(--mono);background:var(--surface);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--ink-soft)}
+
+  /* ---------- cards / grids ---------- */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+  .card h3{font-size:19px;font-weight:750;margin-bottom:6px}
+  .card .k{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px}
+  .card p{color:var(--ink-soft);font-size:14.5px}
+  .card.accent{border-top:3px solid var(--accent)}
+  .card.before{border-top:3px solid var(--ink-faint)}
+  .tag{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:100px;letter-spacing:.03em}
+  .tag.off{background:var(--bad-soft);color:var(--bad-ink)}
+  .tag.on{background:var(--good-soft);color:var(--good-ink)}
+  ul.clean{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+  ul.clean li{position:relative;padding-left:20px;font-size:14px;color:var(--ink-soft)}
+  ul.clean li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+
+  /* flow */
+  .flow{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap}
+  .flow .node{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}
+  .flow .node .who{font-weight:750;font-size:15px}
+  .flow .node .what{font-size:13px;color:var(--ink-soft);margin-top:4px}
+  .flow .node .amt{font-family:var(--mono);font-size:13px;margin-top:9px;color:var(--accent-2);font-weight:600}
+  .flow .arrow{align-self:center;color:var(--ink-faint);font-size:22px;font-weight:700}
+
+  /* ---------- tables ---------- */
+  .tbl{width:100%;border-collapse:collapse;font-size:14px}
+  .tbl th,.tbl td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line-soft)}
+  .tbl th:first-child,.tbl td:first-child{text-align:left}
+  .tbl thead th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;border-bottom:1.5px solid var(--line)}
+  .tbl td.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .tbl tr.hot td{background:var(--bad-soft)}
+  .tbl tr.win td{background:var(--good-soft)}
+  .tbl tbody tr:hover td{background:var(--surface-2)}
+
+  /* ---------- charts ---------- */
+  .chart{display:flex;flex-direction:column;gap:12px}
+  .barrow{display:grid;grid-template-columns:92px 1fr 78px;align-items:center;gap:12px}
+  .barrow .lbl{font-size:13.5px;font-weight:650}
+  .barrow .track2{height:24px;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:7px;overflow:hidden;position:relative}
+  .barrow .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--brand),var(--accent));transition:width .6s cubic-bezier(.4,0,.2,1)}
+  .barrow .fill.b{background:linear-gradient(90deg,var(--accent-2),var(--good))}
+  .barrow .val{font-family:var(--mono);font-size:13.5px;text-align:right;color:var(--ink-soft);font-weight:600}
+
+  .callout{display:flex;gap:14px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--r-sm);padding:16px 18px}
+  .callout .ic{font-family:var(--mono);font-weight:700;color:var(--accent-2);font-size:13px;background:var(--accent-soft);border-radius:7px;padding:3px 8px;white-space:nowrap}
+  .callout p{font-size:14px;color:var(--ink-soft)}
+  .callout b{color:var(--ink)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 20px;box-shadow:var(--shadow)}
+  .panel h4{font-size:12px;font-weight:750;letter-spacing:.09em;text-transform:uppercase;color:var(--accent-2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .panel h4 .n{font-family:var(--mono);color:var(--ink-faint)}
+  .field{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+  .field label{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+  .field .hint{font-size:11px;color:var(--ink-faint)}
+  .field input,.field select{
+    font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink);
+    background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;width:100%;
+    transition:border-color .15s,box-shadow .15s}
+  .field select{font-family:var(--sans);font-weight:600}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .field.inline{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .field.inline input{width:110px;text-align:right}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  table.mods{width:100%;border-collapse:collapse;margin-top:4px}
+  table.mods th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);font-weight:700;padding:0 0 8px;text-align:right}
+  table.mods th:first-child{text-align:left}
+  table.mods td{padding:4px 0 4px 8px;text-align:right}
+  table.mods td:first-child{text-align:left;font-size:13.5px;font-weight:600;padding-left:0}
+  table.mods td small{color:var(--ink-faint);font-weight:500}
+  table.mods input{font-family:var(--mono);font-size:13.5px;font-weight:600;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:6px 8px;width:76px;text-align:right}
+  table.mods input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  table.mods tr.dim td:first-child{color:var(--ink-faint)}
+  table.params{margin-top:2px}
+  table.params input{width:66px}
+  table.params td:first-child{font-size:12.5px}
+  table.params tr.active td{background:var(--accent-soft)}
+  table.params tr.active td:first-child{color:var(--accent-2);font-weight:750}
+
+  /* output */
+  .out{position:sticky;top:0;display:flex;flex-direction:column;gap:14px}
+  .verdict{border-radius:var(--r);padding:18px 20px;border:1px solid var(--line);display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);transition:background .25s,border-color .25s}
+  .verdict .dot{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:0 0 0 5px transparent}
+  .verdict .txt .st{font-size:19px;font-weight:800;letter-spacing:-.01em}
+  .verdict .txt .ds{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+  .verdict.good{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 40%,var(--line))}
+  .verdict.good .dot{background:var(--good);box-shadow:0 0 0 5px color-mix(in srgb,var(--good) 22%,transparent)}
+  .verdict.good .st{color:var(--good-ink)}
+  .verdict.warn{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}
+  .verdict.warn .dot{background:var(--warn);box-shadow:0 0 0 5px color-mix(in srgb,var(--warn) 22%,transparent)}
+  .verdict.warn .st{color:var(--warn)}
+  .verdict.bad{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+  .verdict.bad .dot{background:var(--bad);box-shadow:0 0 0 5px color-mix(in srgb,var(--bad) 22%,transparent)}
+  .verdict.bad .st{color:var(--bad-ink)}
+
+  .hero-num{background:var(--brand-deep);color:#fff;border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .hero-num::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 55%,transparent),transparent 70%)}
+  .hero-num .k{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#9fb3d6;font-weight:700}
+  .hero-num .v{font-family:var(--mono);font-size:clamp(30px,4.4vw,44px);font-weight:700;letter-spacing:-.02em;margin-top:4px}
+  .hero-num .s{font-size:12.5px;color:#b9c9e4;margin-top:2px;font-family:var(--mono)}
+
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 13px}
+  .kpi .k{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
+  .kpi .v{font-family:var(--mono);font-size:19px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .kpi .v.sm{font-size:16px}
+
+  .spread{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px}
+  .spread .row{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);font-weight:600;margin-bottom:7px}
+  .spread .bar{height:16px;border-radius:6px;background:var(--surface-2);position:relative;overflow:hidden;border:1px solid var(--line-soft)}
+  .spread .cost{position:absolute;left:0;top:0;bottom:0;background:var(--bad);opacity:.85}
+  .spread .price-mark{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--good);border-radius:2px}
+  .spread .lg{display:flex;gap:16px;margin-top:9px;font-size:11.5px;color:var(--ink-soft)}
+  .spread .lg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+  /* controls */
+  .controls{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:10px;
+    background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:100px;padding:6px 8px;box-shadow:var(--shadow-lg)}
+  .nav{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+  .nav:hover{border-color:var(--accent);color:var(--accent-2)}
+  .nav:disabled{opacity:.35;cursor:default}
+  .dots{display:flex;gap:7px;padding:0 6px}
+  .dot-btn{width:8px;height:8px;border-radius:50%;border:none;background:var(--line);cursor:pointer;padding:0;transition:transform .2s,background .2s}
+  .dot-btn.active{background:var(--accent);transform:scale(1.35)}
+  .dot-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .foot-note{font-size:12px;color:var(--ink-faint);border-top:1px solid var(--line-soft);padding-top:12px;margin-top:4px}
+
+  @media (max-width:860px){
+    .grid2,.grid3,.calc{grid-template-columns:1fr}
+    .out{position:static}
+    .flow .arrow{transform:rotate(90deg)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .track,.fill,.prog,.dot-btn{transition:none}
+  }
+</style>
+
+<header class="topbar">
+  <div class="brand-lockup"><span class="brand-dot"></span>RUMOTECH CONNECT <span class="x">×</span> NEXOLIBRE</div>
+  <div class="spacer"></div>
+  <span class="counter"><span id="cur">01</span> / <span id="tot">08</span></span>
+  <button class="tbtn" id="themeBtn" aria-label="Cambiar tema">◐ Tema</button>
+  <div class="prog" id="prog"></div>
+</header>
+
+<main class="stage">
+  <div class="track" id="track">
+
+    <!-- 1 · COVER -->
+    <section class="slide cover">
+      <div class="cover-grid"></div>
+      <div class="slide-inner">
+        <div class="cover-eyebrow">Propuesta comercial · Confidencial · 13 jul 2026</div>
+        <h1>Del costo fijo a la <span class="hl">renta por estudio</span></h1>
+        <p class="sub">Modelo de comercialización de Rumotech Connect para NexoLibre: tarifa variable por prestación, segmentada por país, con renta pasiva por cada servicio vendido.</p>
+        <div class="chips">
+          <span class="chip mk">Chile</span><span class="chip mk">Uruguay</span>
+          <span class="chip mk">Argentina</span><span class="chip mk">Colombia</span><span class="chip mk">USA</span>
+        </div>
+        <div class="cover-meta">
+          <span>Para <b>Junta Directiva — NexoLibre</b></span>
+          <span>De <b>Rumotech Connect</b></span>
+          <span>Productos <b>SaaS Full + Cryogenics · EBOX Full</b></span>
+        </div>
+        <div class="navhint">Navegá con <kbd>←</kbd> <kbd>→</kbd> · la diapositiva final es una <b>calculadora en vivo</b> para simular durante la reunión.</div>
+      </div>
+    </section>
+
+    <!-- 2 · MODELO -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">El cambio de modelo</div>
+        <h2>De tarifa fija anual a precio por estudio</h2>
+        <p class="lede">El esquema anterior cobraba una tarifa fija sin importar el uso. El nuevo modelo alinea el precio con el valor entregado: el cliente paga por estudio realizado y NexoLibre captura una renta que escala con la actividad.</p>
+        <div class="grid2">
+          <div class="card before">
+            <div class="k">Antes</div><h3>Tarifa fija anual</h3>
+            <p>Monto fijo por modalidad y sitio, con independencia del volumen. Toda la barrera de entrada la asume el cliente por adelantado.</p>
+          </div>
+          <div class="card accent">
+            <div class="k">Ahora</div><h3>Precio variable por estudio</h3>
+            <p>Costo marginal por estudio, medido automáticamente por la plataforma. Menor fricción comercial, facturación recurrente y renta que crece con el uso.</p>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="node"><div class="who">Rumotech</div><div class="what">Provee la tecnología</div><div class="amt">Costo fijo: USD 100 / modalidad / sede / mes</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="who">NexoLibre</div><div class="what">Revende y opera</div><div class="amt">Spread neto de impuestos = renta pasiva</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="who">Centro de imágenes</div><div class="what">Paga por uso</div><div class="amt">Precio variable / estudio realizado</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · PRODUCTOS -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Alcance del producto</div>
+        <h2>Dos productos, sin versión Basic</h2>
+        <p class="lede">La oferta se concentra en los dos productos de mayor valor. La versión SaaS Basic queda descartada del alcance comercial.</p>
+        <div class="grid2">
+          <div class="card accent">
+            <h3>SaaS Full + Cryogenics <span class="tag on">activo</span></h3>
+            <p>Monitoreo criogénico del resonador + plataforma SaaS Full.</p>
+            <ul class="clean">
+              <li>Dashboard, Deep Dive de productividad de RM, Benchmarks</li>
+              <li>Timeline &amp; Worklist, análisis de protocolos y deriva</li>
+              <li>Metas y alertas, turnos, 225 tags DICOM, AI Monitor</li>
+            </ul>
+          </div>
+          <div class="card accent">
+            <h3>EBOX Full <span class="tag on">activo</span></h3>
+            <p>Acceso remoto completo al resonador, con SaaS Full y Cryogenics incluidos.</p>
+            <ul class="clean">
+              <li>Monitoreo, diagnóstico de fallas y gestión de firmware remotos</li>
+              <li>Soporte de aplicaciones sin visitas presenciales</li>
+              <li>Requiere hardware EBOX (pago único por RM)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout"><span class="ic">Descartado</span><p><b>SaaS Basic</b> sale del catálogo comercial: el foco queda en los productos que sostienen la renta por estudio.</p></div>
+      </div>
+    </section>
+
+    <!-- 4 · PRECIO POR PAIS -->
+    <section class="slide" data-wide>
+      <div class="slide-inner">
+        <div class="eyebrow">Precio segmentado</div>
+        <h2>El precio se ancla al valor del estudio en cada país</h2>
+        <p class="lede">Un estudio factura mucho más en USA, Chile o Uruguay que en Argentina o Colombia. El precio del SaaS es siempre un ~0,5–0,6 % del valor local: marginal para el cliente en cualquier mercado.</p>
+        <div class="grid2" style="align-items:start">
+          <div class="card">
+            <div class="k">Precio SaaS por estudio (USD)</div>
+            <div class="chart" id="chartPrice"></div>
+          </div>
+          <div class="card" style="overflow-x:auto">
+            <table class="tbl">
+              <thead><tr><th>País</th><th>Valor ref.</th><th>Precio</th><th>Take-rate</th><th>Break-even</th></tr></thead>
+              <tbody>
+                <tr><td>USA</td><td class="num">$400</td><td class="num">$2,00</td><td class="num">0,50%</td><td class="num">50/mes</td></tr>
+                <tr><td>Chile</td><td class="num">$200</td><td class="num">$1,20</td><td class="num">0,60%</td><td class="num">83/mes</td></tr>
+                <tr><td>Uruguay</td><td class="num">$180</td><td class="num">$1,00</td><td class="num">0,56%</td><td class="num">100/mes</td></tr>
+                <tr><td>Colombia</td><td class="num">$120</td><td class="num">$0,60</td><td class="num">0,50%</td><td class="num">167/mes</td></tr>
+                <tr class="hot"><td>Argentina</td><td class="num">$80</td><td class="num">$0,40</td><td class="num">0,50%</td><td class="num">250/mes</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="foot-note">Valores de referencia del estudio estimados (RM base), a validar con aranceles locales. Break-even = estudios/mes por modalidad para cubrir el costo fijo de Rumotech.</p>
+      </div>
+    </section>
+
+    <!-- 5 · RENTA Y COSTO FIJO -->
+    <section class="slide" data-wide>
+      <div class="slide-inner">
+        <div class="eyebrow">Renta y punto de equilibrio</div>
+        <h2>El costo fijo es global: aprieta a los mercados baratos</h2>
+        <p class="lede">Como el costo de Rumotech es fijo en dólares e igual en todos los países, en los mercados de precio bajo hace falta más volumen para cubrirlo. El break-even lo hace visible.</p>
+        <div class="grid2" style="align-items:start">
+          <div class="card">
+            <div class="k">Break-even — estudios/mes por modalidad</div>
+            <div class="chart" id="chartBE"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card">
+              <div class="k">Renta neta anual / modalidad — escenario Medio (500 est./mes)</div>
+              <div class="chart" id="chartRenta"></div>
+            </div>
+            <div class="callout"><span class="ic">Palancas</span><p><b>Piso mensual</b> por modalidad para blindar la cobertura del costo fijo, y <b>renegociar con Rumotech un costo menor</b> para Argentina y Colombia.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · DENSIDAD -->
+    <section class="slide" data-wide>
+      <div class="slide-inner">
+        <div class="eyebrow">Densidad de equipos</div>
+        <h2>Más equipos por sede diluyen el costo fijo</h2>
+        <p class="lede">El costo es por modalidad por sede, no por equipo. Tres resonadores en una sede pagan lo mismo que uno, pero generan el triple de estudios. Así se compensa un precio bajo como el de Argentina (USD 0,40).</p>
+        <div class="grid3">
+          <div class="card">
+            <div class="k">1 sede · 1 RM</div><h3 class="mono">$0,40</h3>
+            <p style="margin-top:2px">costo efectivo / estudio</p>
+            <ul class="clean"><li>250 est./mes — apenas equilibrio</li><li>Renta neta anual: <b>$0</b></li></ul>
+          </div>
+          <div class="card">
+            <div class="k">1 sede · 3 RM</div><h3 class="mono">$0,07</h3>
+            <p style="margin-top:2px">costo efectivo / estudio</p>
+            <ul class="clean"><li>1.500 est./mes</li><li>Renta neta anual: <b>$3.900</b></li></ul>
+          </div>
+          <div class="card accent">
+            <div class="k">5 sedes · 1 RM + 1 CT</div><h3 class="mono">$0,17</h3>
+            <p style="margin-top:2px">costo efectivo / estudio</p>
+            <ul class="clean"><li>6.000 est./mes · costo $1.000</li><li>Renta neta anual: <b style="color:var(--good-ink)">$10.920</b></li></ul>
+          </div>
+        </div>
+        <div class="callout"><span class="ic">Insight</span><p>El mismo precio de <b>USD 0,40</b> que no cerraba en un centro chico se vuelve muy rentable con densidad de equipos: el costo efectivo por estudio cae de 0,40 a 0,07–0,17. <b>Probalo en la calculadora →</b></p></div>
+      </div>
+    </section>
+
+    <!-- 7 · CALCULADORA -->
+    <section class="slide" data-wide>
+      <div class="slide-inner">
+        <div class="eyebrow">Calculadora en vivo</div>
+        <h2>Simulá cualquier cliente y mirá si es rentable</h2>
+        <p class="lede">Cambiá país, precio de venta, costo fijo mensual o la configuración de sedes y equipos. El resultado se actualiza al instante.</p>
+        <div class="calc">
+          <!-- controles -->
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="panel">
+              <h4><span class="n">A</span> Parámetros por país</h4>
+              <div class="two">
+                <div class="field">
+                  <label for="pais">País a simular</label>
+                  <select id="pais">
+                    <option>Chile</option><option>Uruguay</option>
+                    <option selected>Argentina</option><option>Colombia</option><option>USA</option>
+                  </select>
+                </div>
+                <div class="field"><label for="costofijo">Costo fijo Rumotech (USD/mod/sede/mes)</label><input id="costofijo" type="number" step="5" min="0" value="100"></div>
+              </div>
+              <table class="mods params">
+                <thead><tr><th>País</th><th>Costo/prestación</th><th>IVA&nbsp;%</th><th>Renta&nbsp;%</th></tr></thead>
+                <tbody id="paramsBody"></tbody>
+              </table>
+              <span class="hint">Editá el costo por prestación (precio/estudio) y el IVA de cada país. La fila resaltada es la que se simula. El costo fijo de Rumotech es la palanca de negociación (por modalidad y sede, no por equipo).</span>
+            </div>
+            <div class="panel">
+              <h4><span class="n">B</span> Configuración del cliente</h4>
+              <div class="field inline"><label for="sedes">Número de sedes</label><input id="sedes" type="number" min="1" step="1" value="5"></div>
+              <table class="mods">
+                <thead><tr><th>Modalidad</th><th>Equipos/sede</th><th>Estudios/equipo/mes</th></tr></thead>
+                <tbody id="modsBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- resultados -->
+          <div class="out">
+            <div class="verdict" id="verdict">
+              <span class="dot"></span>
+              <div class="txt"><div class="st" id="vSt">—</div><div class="ds" id="vDs">—</div></div>
+            </div>
+            <div class="hero-num">
+              <div class="k">Renta neta anual — total cliente</div>
+              <div class="v" id="oAnual">—</div>
+              <div class="s" id="oMensual">—</div>
+            </div>
+            <div class="kpis">
+              <div class="kpi"><div class="k">Costo Rumotech / mes</div><div class="v sm" id="oCosto">—</div></div>
+              <div class="kpi"><div class="k">Volumen / mes</div><div class="v sm" id="oVol">—</div></div>
+              <div class="kpi"><div class="k">Ingreso neto / mes</div><div class="v sm" id="oIng">—</div></div>
+              <div class="kpi"><div class="k">Múltiplo ingreso÷costo</div><div class="v sm" id="oMult">—</div></div>
+              <div class="kpi"><div class="k">IVA aplicado</div><div class="v sm" id="oIva">—</div></div>
+              <div class="kpi"><div class="k">Precio final c/IVA</div><div class="v sm" id="oPreIva">—</div></div>
+            </div>
+            <div class="spread">
+              <div class="row"><span>Costo efectivo / estudio <b class="mono" id="oCef">—</b></span><span>Precio venta <b class="mono" id="oPre">—</b></span></div>
+              <div class="bar"><div class="cost" id="barCost"></div><div class="price-mark" id="barPrice"></div></div>
+              <div class="lg"><span><i style="background:var(--bad)"></i>costo por estudio</span><span><i style="background:var(--good)"></i>precio de venta</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="foot-note">El IVA se muestra como precio final al cliente pero es pass-through (neutro para NexoLibre registrado); la renta neta se calcula sobre el precio neto y el impuesto a la renta. Estudios/equipo/mes por defecto son estimaciones editables (RM 500, CT 700, US 1.000, RX 1.200, MG 300).</p>
+      </div>
+    </section>
+
+    <!-- 8 · CIERRE -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Próximos pasos</div>
+        <h2>Qué necesitamos para poner en marcha</h2>
+        <div class="grid2">
+          <ul class="clean" style="font-size:15px;gap:12px">
+            <li>Validar la grilla de precios por país y el piso mensual (USD 200/modalidad).</li>
+            <li>Confirmar valores de referencia del estudio y tasas impositivas con asesores locales.</li>
+            <li>Negociar con Rumotech un costo fijo reducido para Argentina y Colombia.</li>
+            <li>Definir sitios piloto para calibrar volúmenes reales por modalidad.</li>
+          </ul>
+          <div class="card accent">
+            <div class="k">Documentos del proyecto</div>
+            <ul class="clean">
+              <li>NexoLibre_Propuesta_Comercial_Final.docx</li>
+              <li>NexoLibre_Modelo_Comercializacion.xlsx — modelo vivo + calculadora</li>
+              <li>Esta presentación interactiva (HTML)</li>
+            </ul>
+            <p style="margin-top:14px">La renta pasiva por servicio escala con la actividad del centro y con la densidad de equipos. La calculadora permite cotizar cada oportunidad en el momento.</p>
+          </div>
+        </div>
+        <div class="callout"><span class="ic">Cierre</span><p>Un modelo que <b>reduce la barrera de entrada</b> para el cliente y le deja a NexoLibre una <b>renta pasiva neta por cada estudio</b>, gestionable país por país.</p></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<nav class="controls" aria-label="Navegación de diapositivas">
+  <button class="nav" id="prev" aria-label="Anterior">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav" id="next" aria-label="Siguiente">›</button>
+</nav>
+
+<script>
+(function(){
+  "use strict";
+  /* ---------- theme ---------- */
+  var root=document.documentElement;
+  try{var st=localStorage.getItem("nx-theme"); if(st) root.setAttribute("data-theme",st);}catch(e){}
+  document.getElementById("themeBtn").addEventListener("click",function(){
+    var cur=root.getAttribute("data-theme");
+    if(!cur){cur=window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";}
+    var nx=cur==="dark"?"light":"dark";
+    root.setAttribute("data-theme",nx);
+    try{localStorage.setItem("nx-theme",nx);}catch(e){}
+  });
+
+  /* ---------- deck nav ---------- */
+  var track=document.getElementById("track");
+  var slides=track.children, N=slides.length, i=0;
+  document.getElementById("tot").textContent=String(N).padStart(2,"0");
+  var dots=document.getElementById("dots");
+  for(var d=0;d<N;d++){(function(k){var b=document.createElement("button");b.className="dot-btn";b.setAttribute("aria-label","Ir a diapositiva "+(k+1));b.addEventListener("click",function(){go(k);});dots.appendChild(b);})(d);}
+  var dotEls=dots.children;
+  function go(n){i=Math.max(0,Math.min(N-1,n));
+    track.style.transform="translateX("+(-i*100)+"%)";
+    document.getElementById("cur").textContent=String(i+1).padStart(2,"0");
+    document.getElementById("prog").style.width=((i+1)/N*100)+"%";
+    document.getElementById("prev").disabled=i===0;
+    document.getElementById("next").disabled=i===N-1;
+    for(var k=0;k<N;k++)dotEls[k].classList.toggle("active",k===i);
+  }
+  document.getElementById("prev").addEventListener("click",function(){go(i-1);});
+  document.getElementById("next").addEventListener("click",function(){go(i+1);});
+  document.addEventListener("keydown",function(e){
+    if(/input|select|textarea/i.test((e.target.tagName||"")))return;
+    if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();go(i+1);}
+    else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(i-1);}
+    else if(e.key==="Home"){go(0);}else if(e.key==="End"){go(N-1);}
+  });
+  go(0);
+
+  /* ---------- charts ---------- */
+  function barChart(el,rows,unit,cls){
+    var max=Math.max.apply(null,rows.map(function(r){return r.v;}));
+    el.innerHTML=rows.map(function(r){
+      var w=max>0?(r.v/max*100):0;
+      return '<div class="barrow"><span class="lbl">'+r.l+'</span>'+
+        '<span class="track2"><span class="fill'+(cls?" "+cls:"")+'" style="width:'+w+'%"></span></span>'+
+        '<span class="val">'+unit(r.v)+'</span></div>';
+    }).join("");
+  }
+  var f0=function(v){return "$"+v.toLocaleString("es-ES");};
+  var f2=function(v){return "$"+v.toFixed(2).replace(".",",");};
+  var fInt=function(v){return v.toLocaleString("es-ES");};
+  barChart(document.getElementById("chartPrice"),[
+    {l:"USA",v:2.00},{l:"Chile",v:1.20},{l:"Uruguay",v:1.00},{l:"Colombia",v:0.60},{l:"Argentina",v:0.40}
+  ],f2);
+  barChart(document.getElementById("chartBE"),[
+    {l:"USA",v:50},{l:"Chile",v:83},{l:"Uruguay",v:100},{l:"Colombia",v:167},{l:"Argentina",v:250}
+  ],function(v){return fInt(v)+"/mes";});
+  barChart(document.getElementById("chartRenta"),[
+    {l:"USA",v:8532},{l:"Chile",v:4380},{l:"Uruguay",v:3600},{l:"Colombia",v:1560},{l:"Argentina",v:780}
+  ],f0,"b");
+
+  /* ---------- calculadora ---------- */
+  var ORDER=["Chile","Uruguay","Argentina","Colombia","USA"];
+  var COUNTRY={
+    Chile:{price:1.20,iva:19,tax:27}, Uruguay:{price:1.00,iva:22,tax:25},
+    Argentina:{price:0.40,iva:21,tax:35}, Colombia:{price:0.60,iva:19,tax:35}, USA:{price:2.00,iva:0,tax:21}
+  };
+  var MODS=[
+    {k:"RM",n:"Resonancia (RM)",eq:1,es:500},
+    {k:"CT",n:"Tomografía (CT)",eq:1,es:700},
+    {k:"US",n:"Ultrasonido (US)",eq:0,es:1000},
+    {k:"RX",n:"Rayos X (RX)",eq:0,es:1200},
+    {k:"MG",n:"Mamografía (MG)",eq:0,es:300}
+  ];
+  var $=function(id){return document.getElementById(id);};
+  function num(id){var el=$(id);if(!el)return 0;var v=parseFloat(el.value);return isNaN(v)?0:v;}
+
+  document.getElementById("modsBody").innerHTML=MODS.map(function(m){
+    return '<tr id="row-'+m.k+'"><td>'+m.n+'</td>'+
+      '<td><input type="number" min="0" step="1" id="eq-'+m.k+'" value="'+m.eq+'"></td>'+
+      '<td><input type="number" min="0" step="10" id="es-'+m.k+'" value="'+m.es+'"></td></tr>';
+  }).join("");
+
+  document.getElementById("paramsBody").innerHTML=ORDER.map(function(name){
+    var c=COUNTRY[name];
+    return '<tr id="prow-'+name+'"><td>'+name+'</td>'+
+      '<td><input type="number" min="0" step="0.05" id="p-price-'+name+'" value="'+c.price.toFixed(2)+'"></td>'+
+      '<td><input type="number" min="0" step="1" id="p-iva-'+name+'" value="'+c.iva+'"></td>'+
+      '<td><input type="number" min="0" step="1" id="p-tax-'+name+'" value="'+c.tax+'"></td></tr>';
+  }).join("");
+
+  function syncParams(){
+    ORDER.forEach(function(name){
+      COUNTRY[name].price=num("p-price-"+name);
+      COUNTRY[name].iva=num("p-iva-"+name);
+      COUNTRY[name].tax=num("p-tax-"+name);
+    });
+  }
+
+  function calc(){
+    syncParams();
+    var active=$("pais").value, c=COUNTRY[active];
+    var precio=c.price, iva=c.iva/100, tax=c.tax/100;
+    var cf=num("costofijo"), sedes=Math.max(0,num("sedes"));
+    var activas=0, volSede=0;
+    MODS.forEach(function(m){
+      var eq=num("eq-"+m.k), es=num("es-"+m.k);
+      if(eq>0){activas++; volSede+=eq*es;}
+      var row=$("row-"+m.k); if(row) row.classList.toggle("dim",eq<=0);
+    });
+    ORDER.forEach(function(name){var pr=$("prow-"+name); if(pr) pr.classList.toggle("active",name===active);});
+
+    var costoTot=activas*cf*sedes;
+    var volTot=volSede*sedes;
+    var ingreso=volTot*precio;
+    var margen=ingreso-costoTot;
+    var netaMes=margen*(1-tax);
+    var netaAnual=netaMes*12;
+    var cef=volTot>0?costoTot/volTot:0;
+    var mult=costoTot>0?ingreso/costoTot:0;
+    var precioIva=precio*(1+iva);
+
+    $("oAnual").textContent=(netaAnual<0?"–$":"$")+Math.abs(Math.round(netaAnual)).toLocaleString("es-ES");
+    $("oMensual").textContent=(netaMes<0?"–$":"$")+Math.abs(Math.round(netaMes)).toLocaleString("es-ES")+" / mes neto";
+    $("oCosto").textContent="$"+Math.round(costoTot).toLocaleString("es-ES");
+    $("oVol").textContent=Math.round(volTot).toLocaleString("es-ES");
+    $("oIng").textContent="$"+Math.round(ingreso).toLocaleString("es-ES");
+    $("oMult").textContent=(mult>0?mult.toFixed(1):"0")+"x";
+    $("oIva").textContent=Math.round(c.iva)+"%";
+    $("oPreIva").textContent="$"+precioIva.toFixed(2).replace(".",",");
+    $("oCef").textContent="$"+cef.toFixed(2).replace(".",",");
+    $("oPre").textContent="$"+precio.toFixed(2).replace(".",",");
+
+    var ratio=precio>0?Math.min(cef/precio,1.6):1.6;
+    $("barCost").style.width=Math.min(ratio,1)*100+"%";
+    $("barPrice").style.left="calc(100% - 3px)";
+    $("barCost").style.background="var(--bad)";
+
+    var v=$("verdict"), stt=$("vSt"), ds=$("vDs");
+    v.classList.remove("good","warn","bad");
+    var marginPct=ingreso>0?margen/ingreso:-1;
+    if(volTot<=0||activas<=0){
+      v.classList.add("bad"); stt.textContent="SIN CONFIGURAR";
+      ds.textContent="Agregá al menos una modalidad con equipos y volumen.";
+    }else if(margen<=0){
+      v.classList.add("bad"); stt.textContent="NO RENTABLE";
+      ds.textContent="El precio no cubre el costo fijo: subí el precio, el volumen o negociá el costo.";
+    }else if(marginPct<0.30){
+      v.classList.add("warn"); stt.textContent="MARGEN AJUSTADO";
+      ds.textContent="Rentable pero fino ("+Math.round(marginPct*100)+"% de margen). Más equipos/sedes lo mejoran.";
+    }else{
+      v.classList.add("good"); stt.textContent="RENTABLE";
+      ds.textContent="Margen sólido ("+Math.round(marginPct*100)+"%). Costo efectivo $"+cef.toFixed(2).replace(".",",")+" vs precio neto $"+precio.toFixed(2).replace(".",",")+".";
+    }
+  }
+
+  $("pais").addEventListener("change",calc);
+  $("costofijo").addEventListener("input",calc);
+  $("sedes").addEventListener("input",calc);
+  ORDER.forEach(function(name){["p-price-","p-iva-","p-tax-"].forEach(function(pfx){$(pfx+name).addEventListener("input",calc);});});
+  MODS.forEach(function(m){$("eq-"+m.k).addEventListener("input",calc);$("es-"+m.k).addEventListener("input",calc);});
+  calc();
+})();
+</script>
