@@ -8,10 +8,10 @@ Acuerdo comercial de Rumotech Connect para su comercialización por NexoLibre en
 
 | Archivo | Descripción |
 |---|---|
-| `NexoLibre_Propuesta_Comercial_Final.docx` | Propuesta comercial formal (10 secciones). |
-| `NexoLibre_Modelo_Comercializacion.xlsx` | Modelo financiero vivo: Supuestos, Calculadora, Modelo por Estudio, Renta Anual, Precios por País. |
-| `NexoLibre_Presentacion_Interactiva.html` | Presentación interactiva con calculadora de rentabilidad en vivo (editable por país: costo por prestación, IVA, impuesto a la renta; sedes y equipos). |
-| `Rumotech_Propuesta-NexoLibre_ES_rev1.pdf` | Propuesta original de referencia (tarifa fija). |
+| `propuesta.docx` | Propuesta comercial formal (10 secciones). |
+| `modelo.xlsx` | Modelo financiero vivo: Supuestos, Calculadora, Modelo por Estudio, Renta Anual, Precios por País. |
+| `presentacion.html` | Presentación interactiva con calculadora de rentabilidad en vivo (editable por país: costo por prestación, IVA, impuesto a la renta; sedes y equipos). |
+| `original.pdf` | Propuesta original de referencia (tarifa fija). |
 
 ## Modelo en una línea
 
@@ -19,4 +19,4 @@ Rumotech traslada a NexoLibre un **costo fijo de USD 100 por modalidad por sede 
 
 ## Presentación
 
-Abrir `NexoLibre_Presentacion_Interactiva.html` en cualquier navegador. Navegación con ← →; incluye tema claro/oscuro y una calculadora en vivo en la última diapositiva.
+Abrir `presentacion.html` en cualquier navegador. Navegación con ← →; incluye tema claro/oscuro y una calculadora en vivo en la última diapositiva.
