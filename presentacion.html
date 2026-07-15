@@ -194,6 +194,22 @@
   .seg button.active{background:var(--surface);color:var(--accent-2);box-shadow:var(--shadow)}
   .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .patient-box{margin-top:6px;padding-top:12px;border-top:1px dashed var(--line)}
+  .costbox{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;margin-bottom:12px}
+  .cbk{font-size:10.5px;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+  .cbr{font-size:11.5px;color:var(--ink-faint);line-height:1.55;opacity:.6}
+  .cbr.on{color:var(--ink-soft);opacity:1}
+  .cbr.on b{color:var(--accent-2)}
+  .ogroup{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+  .ogroup h5{margin:0 0 8px;font-size:11.5px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-2);display:flex;align-items:center;gap:8px}
+  .ogroup.res{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+  .tagfix{font-size:9.5px;letter-spacing:.03em;background:var(--surface-3);color:var(--ink-faint);border-radius:100px;padding:2px 8px;font-weight:700;text-transform:none}
+  .orow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:9px 0;border-top:1px solid var(--line-soft)}
+  .orow:first-of-type{border-top:none}
+  .ol{font-size:13px;font-weight:650;color:var(--ink);display:flex;flex-direction:column;gap:3px}
+  .of{font-size:10.5px;font-weight:400;color:var(--ink-faint);line-height:1.45;max-width:48ch}
+  .ov{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px;font-weight:700;color:var(--ink);white-space:nowrap}
+  .ov.soft{color:var(--ink-faint)}
+  .orow.big .ov{font-size:19px;color:var(--good-ink)}
   .explain{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 16px;box-shadow:var(--shadow)}
   .explain summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent-2);padding:12px 0;list-style:none}
   .explain summary::-webkit-details-marker{display:none}
@@ -432,28 +448,25 @@
       <div class="slide-inner">
         <div class="eyebrow">Calculadora en vivo</div>
         <h2>Simulá cualquier cliente y mirá si es rentable</h2>
-        <p class="lede">Cambiá país, precio de venta, costo fijo mensual o la configuración de sedes y equipos. El resultado se actualiza al instante.</p>
+        <p class="lede">Simulá el <b>precio de venta</b> por país y la configuración del cliente. Los costos son los de la propuesta de Rumotech y no se editan. Cada dato explica abajo cómo se calcula.</p>
         <div class="calc">
           <!-- controles -->
           <div style="display:flex;flex-direction:column;gap:16px">
             <div class="panel">
-              <h4><span class="n">A</span> Parámetros impositivos por país</h4>
+              <h4><span class="n">A</span> Precios de venta e impuestos por país</h4>
               <div class="chips-sel" id="countrySel"></div>
-              <div class="two">
-                <div class="field">
-                  <label for="pais">País a simular</label>
-                  <select id="pais">
-                    <option>Chile</option><option>Uruguay</option>
-                    <option selected>Argentina</option><option>Colombia</option><option>USA</option>
-                  </select>
-                </div>
-                <div class="field"><label for="costofijo">Costo fijo Rumotech (USD/mod/sede/mes)</label><input id="costofijo" type="number" step="5" min="0" value="100"></div>
+              <div class="field">
+                <label for="pais">País a simular</label>
+                <select id="pais">
+                  <option>Chile</option><option>Uruguay</option>
+                  <option selected>Argentina</option><option>Colombia</option><option>USA</option>
+                </select>
               </div>
               <table class="mods params">
-                <thead><tr><th>País</th><th>Costo/prest.</th><th>IVA&nbsp;%</th><th>IIBB&nbsp;%</th><th>Renta&nbsp;%</th></tr></thead>
+                <thead><tr><th>País</th><th>Precio venta</th><th>IVA&nbsp;%</th><th>IIBB&nbsp;%</th><th>Ganancias&nbsp;%</th></tr></thead>
                 <tbody id="paramsBody"></tbody>
               </table>
-              <span class="hint">Marcá con los chips los países del ejercicio. Editá el costo por prestación, el IVA, los Ingresos Brutos (IIBB, impuesto provincial de Argentina) y el impuesto a la renta de cada uno. La fila resaltada es la que se simula.</span>
+              <span class="hint">Marcá con los chips los países del ejercicio. <b>Simulá el precio de venta</b> por prestación (sin IVA) y las alícuotas de cada país. La fila resaltada es la que se simula.</span>
             </div>
             <div class="panel">
               <h4><span class="n">B</span> Configuración del cliente</h4>
@@ -461,7 +474,11 @@
                 <div class="field"><label for="sedes">Número de sedes</label><input id="sedes" type="number" min="1" step="1" value="5"></div>
                 <div class="field"><label for="rmplan">Plan para RM</label><select id="rmplan"><option value="saas">SaaS Full + Cryogenics</option><option value="ebox">EBOX Full</option></select></div>
               </div>
-              <div class="field" id="eboxNote" hidden><label for="eboxAnual">EBOX Full — costo anual por resonador (USD)</label><input id="eboxAnual" type="number" step="500" min="0" value="10000"><span class="hint">Con EBOX, el costo de RM es por resonador (no por sede).</span></div>
+              <div class="costbox">
+                <div class="cbk">Costos Rumotech · fijos, según la propuesta adjunta</div>
+                <div class="cbr" id="cbSaas">SaaS Full + Cryogenics — USD 1.200/modalidad/sede/año = <b>USD 100/mes</b> · HW USD 150/RM</div>
+                <div class="cbr" id="cbEbox">EBOX Full — USD 10.000/RM/año = <b>USD 833/mes por resonador</b> + USD 2.100/modalidad adicional/año = <b>USD 175/mes</b> · HW USD 500/RM</div>
+              </div>
               <div class="seg" id="volMethod">
                 <button type="button" data-m="equipos" class="active">Volumen por equipos</button>
                 <button type="button" data-m="pacientes">Volumen por pacientes</button>
@@ -479,50 +496,50 @@
               </div>
             </div>
           </div>
-          <!-- resultados -->
+          <!-- resultados agrupados -->
           <div class="out">
             <div class="verdict" id="verdict">
               <span class="dot"></span>
               <div class="txt"><div class="st" id="vSt">—</div><div class="ds" id="vDs">—</div></div>
             </div>
-            <div class="hero-num">
-              <div class="k">Renta neta anual — total cliente</div>
-              <div class="v" id="oAnual">—</div>
-              <div class="s" id="oMensual">—</div>
+
+            <div class="ogroup">
+              <h5>1 · Precios de venta</h5>
+              <div class="orow"><div class="ol">Precio de venta / prestación<span class="of">Lo que le cobramos al centro por cada estudio, sin IVA. Es la palanca que simulás.</span></div><div class="ov" id="oPre">—</div></div>
+              <div class="orow"><div class="ol">IVA / prestación<span class="of" id="ofIvaU">—</span></div><div class="ov soft" id="oIvaU">—</div></div>
+              <div class="orow"><div class="ol">Precio facturado / prestación<span class="of">Precio de venta + IVA. Es lo que el cliente paga por cada estudio.</span></div><div class="ov" id="oPreIva">—</div></div>
             </div>
-            <div class="kpis">
-              <div class="kpi"><div class="k">Costo Rumotech / mes</div><div class="v sm" id="oCosto">—</div></div>
-              <div class="kpi"><div class="k">Prestaciones / mes</div><div class="v sm" id="oVol">—</div></div>
-              <div class="kpi"><div class="k">Ingreso neto / mes</div><div class="v sm" id="oIng">—</div></div>
-              <div class="kpi"><div class="k">Ing. Brutos (IIBB) / mes</div><div class="v sm" id="oIIBB">—</div></div>
-              <div class="kpi"><div class="k">Imp. renta / mes</div><div class="v sm" id="oRenta">—</div></div>
-              <div class="kpi"><div class="k">Hardware (pago único)</div><div class="v sm" id="oHW">—</div></div>
-              <div class="kpi"><div class="k">IVA aplicado</div><div class="v sm" id="oIva">—</div></div>
-              <div class="kpi"><div class="k">Precio final c/IVA</div><div class="v sm" id="oPreIva">—</div></div>
+
+            <div class="ogroup">
+              <h5>2 · Ingresos</h5>
+              <div class="orow"><div class="ol">Prestaciones / mes<span class="of" id="ofVol">—</span></div><div class="ov" id="oVol">—</div></div>
+              <div class="orow"><div class="ol">Ingreso bruto / mes<span class="of" id="ofIng">—</span></div><div class="ov" id="oIng">—</div></div>
+              <div class="orow"><div class="ol">Facturación total / mes (c/IVA)<span class="of" id="ofFact">—</span></div><div class="ov" id="oFact">—</div></div>
             </div>
-            <div class="spread">
-              <div class="row"><span>Costo efectivo / prestación <b class="mono" id="oCef">—</b></span><span>Precio neto <b class="mono" id="oPre">—</b></span></div>
-              <div class="bar"><div class="cost" id="barCost"></div><div class="price-mark" id="barPrice"></div></div>
-              <div class="lg"><span><i style="background:var(--bad)"></i>costo por prestación</span><span><i style="background:var(--good)"></i>precio de venta</span></div>
+
+            <div class="ogroup">
+              <h5>3 · Costos <span class="tagfix">fijos · del documento</span></h5>
+              <div class="orow"><div class="ol">Costo Rumotech / mes<span class="of" id="ofCosto">—</span></div><div class="ov" id="oCosto">—</div></div>
+              <div class="orow"><div class="ol">Costo efectivo / prestación<span class="of" id="ofCef">—</span></div><div class="ov" id="oCef">—</div></div>
+              <div class="orow"><div class="ol">Hardware (pago único)<span class="of" id="ofHW">—</span></div><div class="ov soft" id="oHW">—</div></div>
+            </div>
+
+            <div class="ogroup">
+              <h5>4 · Impuestos</h5>
+              <div class="orow"><div class="ol">IVA trasladado / mes<span class="of" id="ofIva">—</span></div><div class="ov soft" id="oIva">—</div></div>
+              <div class="orow"><div class="ol">Ingresos Brutos (IIBB) / mes<span class="of" id="ofIIBB">—</span></div><div class="ov" id="oIIBB">—</div></div>
+              <div class="orow"><div class="ol">Impuesto a las ganancias / mes<span class="of" id="ofGan">—</span></div><div class="ov" id="oGan">—</div></div>
+            </div>
+
+            <div class="ogroup res">
+              <h5>5 · Resultado</h5>
+              <div class="orow"><div class="ol">Margen bruto / mes<span class="of" id="ofBruto">—</span></div><div class="ov" id="oBruto">—</div></div>
+              <div class="orow big"><div class="ol">Ganancia neta / mes<span class="of" id="ofNeta">—</span></div><div class="ov" id="oNeta">—</div></div>
+              <div class="orow big"><div class="ol">Ganancia neta anual<span class="of">Ganancia neta mensual × 12. Es la renta pasiva que retiene NexoLibre por este cliente.</span></div><div class="ov" id="oAnual">—</div></div>
             </div>
           </div>
         </div>
-        <details class="explain">
-          <summary>¿Qué representa cada valor y cómo se calcula?</summary>
-          <dl>
-            <dt>Prestaciones / mes</dt><dd>Estudios facturables. Por equipos = Σ (equipos × estudios/equipo/mes); por pacientes = pacientes × coeficiente. Todo × número de sedes.</dd>
-            <dt>Costo Rumotech / mes</dt><dd>Lo que Rumotech nos cobra. Cada modalidad activa (incl. RM con SaaS+Cryo) = costo fijo × sedes. RM con EBOX = (costo anual EBOX ÷ 12) × resonadores × sedes (por equipo).</dd>
-            <dt>Ingreso neto / mes</dt><dd>Prestaciones × precio por prestación (neto de IVA).</dd>
-            <dt>IVA aplicado · Precio final c/IVA</dt><dd>El IVA se factura al cliente sobre el precio (precio × (1 + IVA)) y se traslada al fisco: es neutro para nuestra renta.</dd>
-            <dt>Ingresos Brutos (IIBB)</dt><dd>Impuesto provincial argentino sobre el ingreso bruto. Se resta del margen: ingreso × IIBB %. En los demás países es 0.</dd>
-            <dt>Imp. a la renta / mes</dt><dd>Sobre la ganancia después de costos e IIBB: margen operativo × alícuota del país.</dd>
-            <dt>Renta neta anual</dt><dd>(Ingreso − costo Rumotech − IIBB − impuesto a la renta) × 12. Es la renta pasiva que retiene NexoLibre.</dd>
-            <dt>Hardware (pago único)</dt><dd>Costo único por resonador: SaaS+Cryo USD 150, EBOX USD 500. No entra en la renta recurrente.</dd>
-            <dt>Costo efectivo / prestación</dt><dd>Costo Rumotech ÷ prestaciones. Baja al sumar equipos o sedes: la densidad compensa precios bajos.</dd>
-            <dt>Múltiplo ingreso÷costo</dt><dd>Cuántas veces el ingreso cubre el costo de Rumotech (aparece junto a la renta mensual).</dd>
-          </dl>
-        </details>
-        <p class="foot-note">Modelo espejo de la hoja «Calculadora» del Excel. Tasas y coeficientes por defecto son estimaciones editables; validar con datos reales. El IVA es pass-through; IIBB y el impuesto a la renta sí reducen la renta.</p>
+        <p class="foot-note">Costos tomados de la propuesta Rumotech adjunta (no editables). Impuestos: el IVA se factura al cliente y se traslada al fisco (no afecta la ganancia); el IIBB se calcula sobre la <b>factura completa con IVA incluido</b>; el impuesto a las ganancias sobre el <b>margen (precio de venta − costo del servicio)</b>. Alícuotas, precios y volúmenes por defecto son estimaciones editables: validar con datos reales.</p>
       </div>
     </section>
 
@@ -643,8 +660,8 @@
   var volMode="equipos";
   var $=function(id){return document.getElementById(id);};
   function num(id){var el=$(id);if(!el)return 0;var v=parseFloat(el.value);return isNaN(v)?0:v;}
-  function money(n){return "$"+Math.round(n).toLocaleString("es-ES");}
-  function money2(n){return "$"+n.toFixed(2).replace(".",",");}
+  function money(n){return (n<0?"–":"")+"$"+Math.round(Math.abs(n)).toLocaleString("es-ES");}
+  function money2(n){return (n<0?"–":"")+"$"+Math.abs(n).toFixed(2).replace(".",",");}
 
   $("countrySel").innerHTML=ORDER.map(function(name){
     return '<label id="chip-'+name+'" class="on"><input type="checkbox" id="chk-'+name+'" checked>'+name+'</label>';
@@ -686,9 +703,13 @@
     });
   }
 
+  /* COSTOS FIJOS — propuesta Rumotech adjunta (no editables) */
+  var COST={saasModMes:1200/12, eboxRMMes:10000/12, eboxAdicMes:2100/12, hwCryo:150, hwEbox:500};
+
   function updateUI(){
     var ebox=$("rmplan").value==="ebox";
-    $("eboxNote").hidden=!ebox;
+    $("cbSaas").classList.toggle("on",!ebox);
+    $("cbEbox").classList.toggle("on",ebox);
     $("patientBox").hidden=(volMode!=="pacientes");
     MODS.forEach(function(m){var e=$("es-"+m.k); if(e) e.style.opacity=(volMode==="pacientes")?"0.4":"1";});
     Array.prototype.forEach.call($("volMethod").children,function(b){b.classList.toggle("active",b.getAttribute("data-m")===volMode);});
@@ -700,17 +721,17 @@
     updateUI();
     var active=$("pais").value, c=COUNTRY[active];
     var precio=c.price, iva=c.iva/100, iibb=c.iibb/100, tax=c.tax/100;
-    var cf=num("costofijo"), sedes=Math.max(0,num("sedes"));
-    var plan=$("rmplan").value, eboxAnual=num("eboxAnual");
+    var sedes=Math.max(0,num("sedes"));
+    var plan=$("rmplan").value, ebox=(plan==="ebox");
 
-    var activas=0, volEquipos=0, rmEq=0, costoSede=0;
+    var activas=0, volEquipos=0, rmEq=0, costoSede=0, adic=0;
     MODS.forEach(function(m){
       var eq=num("eq-"+m.k), es=num("es-"+m.k), on=eq>0;
       if(on){ activas++; volEquipos+=eq*es; }
       if(m.k==="RM") rmEq=eq;
       if(on){
-        if(m.k==="RM" && plan==="ebox") costoSede += (eboxAnual/12)*eq;
-        else costoSede += cf;
+        if(m.k==="RM") costoSede += ebox ? COST.eboxRMMes*eq : COST.saasModMes;
+        else { costoSede += ebox ? COST.eboxAdicMes : COST.saasModMes; adic++; }
       }
       var row=$("row-"+m.k); if(row) row.classList.toggle("dim",!on);
     });
@@ -720,59 +741,85 @@
     if(volMode==="pacientes"){var ps=$("prestSede"); if(ps) ps.textContent=Math.round(pac*coef).toLocaleString("es-ES")+" prest./sede";}
     var volSede=(volMode==="pacientes")?pac*coef:volEquipos;
 
-    var costoTot=costoSede*sedes;
     var volTot=volSede*sedes;
-    var ingreso=volTot*precio;
-    var iibbAmt=ingreso*iibb;
-    var margenOper=ingreso-costoTot-iibbAmt;
-    var rentaImp=margenOper>0?margenOper*tax:0;
-    var netaMes=margenOper-rentaImp;
-    var netaAnual=netaMes*12;
+    var costoTot=costoSede*sedes;
+
+    /* --- precios unitarios --- */
+    var ivaU=precio*iva, preIva=precio+ivaU;
+    /* --- ingresos --- */
+    var ingBruto=volTot*precio;              // sin IVA
+    var ivaAmt=ingBruto*iva;                 // trasladado al cliente
+    var factura=ingBruto+ivaAmt;             // factura completa
+    /* --- impuestos --- */
+    var iibbAmt=factura*iibb;                // IIBB sobre la factura CON IVA
+    var margenBruto=ingBruto-costoTot;       // precio de venta − costo del servicio
+    var ganAmt=margenBruto>0?margenBruto*tax:0;  // ganancias sobre el margen
+    /* --- resultado --- */
+    var neta=margenBruto-iibbAmt-ganAmt;
+    var netaAnual=neta*12;
     var cef=volTot>0?costoTot/volTot:0;
-    var mult=costoTot>0?ingreso/costoTot:0;
-    var precioIva=precio*(1+iva);
-    var hwTot=(plan==="ebox"?500:150)*rmEq*sedes;
+    var hwTot=(ebox?COST.hwEbox:COST.hwCryo)*rmEq*sedes;
 
-    $("oAnual").textContent=(netaAnual<0?"–":"")+money(Math.abs(netaAnual));
-    $("oMensual").textContent=(netaMes<0?"–":"")+money(Math.abs(netaMes))+" / mes · "+(mult>0?mult.toFixed(1):"0")+"x ingreso÷costo";
-    $("oCosto").textContent=money(costoTot);
-    $("oVol").textContent=Math.round(volTot).toLocaleString("es-ES");
-    $("oIng").textContent=money(ingreso);
-    $("oIIBB").textContent=iibb>0?money(iibbAmt):"—";
-    $("oRenta").textContent=money(rentaImp);
-    $("oHW").textContent=money(hwTot);
-    $("oIva").textContent=Math.round(c.iva)+"%";
-    $("oPreIva").textContent=money2(precioIva);
-    $("oCef").textContent=money2(cef);
+    /* 1 · precios */
     $("oPre").textContent=money2(precio);
-
-    var ratio=precio>0?Math.min(cef/precio,1):(cef>0?1:0);
-    $("barCost").style.width=(ratio*100)+"%";
-    $("barPrice").style.left="calc(100% - 3px)";
+    $("oIvaU").textContent=money2(ivaU);
+    $("ofIvaU").textContent="Precio de venta "+money2(precio)+" × IVA "+c.iva+"%. Se le suma al cliente en la factura y se traslada al fisco.";
+    $("oPreIva").textContent=money2(preIva);
+    /* 2 · ingresos */
+    $("oVol").textContent=Math.round(volTot).toLocaleString("es-ES");
+    $("ofVol").textContent=(volMode==="pacientes"
+      ? "Pacientes "+Math.round(pac)+" × coeficiente "+coef+" = "+Math.round(volSede)+" por sede"
+      : "Suma de equipos × estudios/equipo = "+Math.round(volSede)+" por sede")+" × "+sedes+" sedes.";
+    $("oIng").textContent=money(ingBruto);
+    $("ofIng").textContent=Math.round(volTot).toLocaleString("es-ES")+" prestaciones × "+money2(precio)+" (sin IVA). Es facturación antes de costos e impuestos: no es ganancia.";
+    $("oFact").textContent=money(factura);
+    $("ofFact").textContent="Ingreso bruto "+money(ingBruto)+" + IVA "+money(ivaAmt)+". Es el total que se le cobra al cliente y la base del IIBB.";
+    /* 3 · costos */
+    $("oCosto").textContent=money(costoTot);
+    $("ofCosto").textContent=ebox
+      ? "EBOX Full: "+rmEq+" RM × $833/mes"+(adic>0?" + "+adic+" modalidad(es) adicional(es) × $175/mes":"")+", × "+sedes+" sedes. Fijo según la propuesta."
+      : "SaaS Full + Cryogenics: "+activas+" modalidad(es) × $100/mes × "+sedes+" sedes. Se cobra por modalidad y sede, no por equipo. Fijo según la propuesta.";
+    $("oCef").textContent=money2(cef);
+    $("ofCef").textContent="Costo "+money(costoTot)+" ÷ "+Math.round(volTot).toLocaleString("es-ES")+" prestaciones. Baja al sumar equipos o sedes: la densidad diluye el costo fijo.";
+    $("oHW").textContent=money(hwTot);
+    $("ofHW").textContent=(ebox?"USD 500":"USD 150")+" × "+rmEq+" RM × "+sedes+" sedes ("+(ebox?"EBOX Full":"Cryogenics")+"). Pago único: no entra en la ganancia recurrente.";
+    /* 4 · impuestos */
+    $("oIva").textContent=money(ivaAmt);
+    $("ofIva").textContent="Ingreso bruto × IVA "+c.iva+"%. Lo paga el cliente y se traslada al fisco: no afecta nuestra ganancia.";
+    $("oIIBB").textContent=iibb>0?money(iibbAmt):"—";
+    $("ofIIBB").textContent=iibb>0
+      ? "Factura completa "+money(factura)+" (precio + IVA) × "+c.iibb+"%. Se aplica sobre la factura con IVA incluido. Sí es costo nuestro."
+      : "No aplica en "+active+". En Argentina se calcula sobre la factura completa (precio + IVA).";
+    $("oGan").textContent=money(ganAmt);
+    $("ofGan").textContent="Margen bruto "+money(margenBruto)+" × "+c.tax+"%. Se calcula sobre el margen: precio de venta − costo del servicio.";
+    /* 5 · resultado */
+    $("oBruto").textContent=money(margenBruto);
+    $("ofBruto").textContent="Ingreso bruto "+money(ingBruto)+" − costo Rumotech "+money(costoTot)+". Antes de impuestos.";
+    $("oNeta").textContent=money(neta);
+    $("ofNeta").textContent="Margen bruto "+money(margenBruto)+" − IIBB "+money(iibbAmt)+" − ganancias "+money(ganAmt)+".";
+    $("oAnual").textContent=money(netaAnual);
 
     var v=$("verdict"), stt=$("vSt"), ds=$("vDs");
     v.classList.remove("good","warn","bad");
-    var marginPct=ingreso>0?margenOper/ingreso:-1;
+    var marginPct=ingBruto>0?neta/ingBruto:-1;
     if(volTot<=0||activas<=0){
       v.classList.add("bad"); stt.textContent="SIN CONFIGURAR";
       ds.textContent="Agregá al menos una modalidad activa con volumen (equipos o pacientes).";
-    }else if(margenOper<=0){
+    }else if(neta<=0){
       v.classList.add("bad"); stt.textContent="NO RENTABLE";
-      ds.textContent="El precio no cubre el costo"+(iibb>0?" e IIBB":"")+": subí el precio, el volumen o negociá el costo.";
-    }else if(marginPct<0.30){
+      ds.textContent="Después de costos e impuestos la ganancia es negativa: subí el precio de venta o el volumen.";
+    }else if(marginPct<0.25){
       v.classList.add("warn"); stt.textContent="MARGEN AJUSTADO";
-      ds.textContent="Rentable pero fino ("+Math.round(marginPct*100)+"% de margen). Más equipos/sedes lo mejoran.";
+      ds.textContent="Rentable pero fino ("+Math.round(marginPct*100)+"% de ganancia neta sobre el ingreso). Más equipos o sedes lo mejoran.";
     }else{
       v.classList.add("good"); stt.textContent="RENTABLE";
-      ds.textContent="Margen sólido ("+Math.round(marginPct*100)+"%). Costo efectivo "+money2(cef)+" vs precio neto "+money2(precio)+".";
+      ds.textContent="Ganancia neta sólida ("+Math.round(marginPct*100)+"% del ingreso). Costo efectivo "+money2(cef)+" vs precio de venta "+money2(precio)+".";
     }
   }
 
   $("pais").addEventListener("change",calc);
-  $("costofijo").addEventListener("input",calc);
   $("sedes").addEventListener("input",calc);
   $("rmplan").addEventListener("change",calc);
-  $("eboxAnual").addEventListener("input",calc);
   $("pac").addEventListener("input",calc);
   $("coef").addEventListener("input",calc);
   ORDER.forEach(function(name){
