@@ -210,6 +210,83 @@
   .ov{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px;font-weight:700;color:var(--ink);white-space:nowrap}
   .ov.soft{color:var(--ink-faint)}
   .orow.big .ov{font-size:19px;color:var(--good-ink)}
+
+  /* ---- calculadora: layout compacto, sin scroll ---- */
+  .calcslide{padding:14px 18px 0}
+  .calcslide .slide-inner{max-width:1250px;justify-content:flex-start;gap:5px;padding-bottom:36px}
+  .calcslide .eyebrow{font-size:10px}
+  .calcslide h2{font-size:clamp(17px,1.75vw,22px)}
+  .calcgrid{display:grid;grid-template-columns:0.82fr 0.95fr 1.78fr;gap:9px;align-items:start;
+    grid-template-areas:"pais cli res" "sug sug res"}
+  .a-pais{grid-area:pais}.a-cli{grid-area:cli}.resultcard{grid-area:res}
+  .sugrow{grid-area:sug;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .calcgrid .panel{padding:12px 13px}
+  .calcgrid .panel h4{margin-bottom:9px;font-size:10.5px}
+  .calcgrid .field{margin-bottom:8px;gap:3px}
+  .calcgrid .field label{font-size:11px}
+  .calcgrid .field input,.calcgrid .field select{padding:6px 8px;font-size:12.5px;border-radius:8px}
+  .calcgrid .hint{font-size:9px;line-height:1.35;display:block;margin-top:5px}
+  .calcgrid .chips-sel{margin-bottom:8px;gap:5px}
+  .calcgrid .chips-sel label{font-size:10.5px;padding:3px 8px;gap:4px}
+  .calcgrid table.mods th{font-size:9px;padding:0 0 4px 4px}
+  .calcgrid table.mods td{padding:2px 0 2px 4px}
+  .calcgrid table.mods td:first-child{font-size:11px}
+  .calcgrid table.mods input{padding:3px 4px;font-size:11px;width:100%;min-width:0}
+  .calcgrid table.mods input::-webkit-outer-spin-button,
+  .calcgrid table.mods input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .calcgrid table.mods input[type=number]{-moz-appearance:textfield;appearance:textfield}
+  .calcgrid table.cli{table-layout:fixed;width:100%}
+  .calcgrid table.cli th:first-child,.calcgrid table.cli td:first-child{width:72px}
+  .calcgrid table.cli th:last-child,.calcgrid table.cli td:last-child{width:50px}
+  .calcgrid table.params{table-layout:fixed;width:100%}
+  .calcgrid table.params th:first-child,.calcgrid table.params td:first-child{width:60px}
+  .calcgrid table.mods td.vol{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--accent-2)}
+  .calcgrid table.mods tfoot td{font-size:10.5px;font-weight:750;color:var(--ink);border-top:1px solid var(--line);padding-top:5px}
+  .calcgrid .costbox{padding:6px 9px;margin:6px 0 0}
+  .calcgrid .cbr{font-size:9.5px}
+
+  /* resultados destacados */
+  .resultcard{background:var(--surface-3);border:2px solid var(--accent);border-radius:calc(var(--r) + 4px);padding:10px;
+    display:flex;flex-direction:column;gap:7px;
+    box-shadow:0 12px 40px -12px color-mix(in srgb,var(--accent) 45%,transparent),var(--shadow-lg)}
+  .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .resultcard .ogroup{padding:8px 10px;border-radius:10px;box-shadow:none}
+  .resultcard .ogroup h5{margin-bottom:3px;font-size:9px}
+  .resultcard .orow{padding:3px 0}
+  .resultcard .ol{font-size:10.5px;gap:1px}
+  .resultcard .of{font-size:8.5px;line-height:1.32;max-width:34ch}
+  .resultcard .ov{font-size:13px}
+  .resultcard .verdict{padding:7px 11px;gap:9px;box-shadow:none}
+  .resultcard .verdict .st{font-size:13.5px}
+  .resultcard .verdict .ds{font-size:9.5px;line-height:1.35}
+  .ogroup.res{background:var(--surface);border-color:color-mix(in srgb,var(--accent) 55%,var(--line))}
+  .rres{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+  .rstat{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:9px;padding:6px 8px}
+  .rstat.hi{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 38%,transparent)}
+  .rk{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint)}
+  .rv{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:17px;font-weight:800;color:var(--ink);margin-top:1px}
+  .rstat.hi .rv{color:var(--good-ink)}
+  .rf{font-size:8px;color:var(--ink-faint);margin-top:2px;line-height:1.32}
+
+  /* tarjetas sugerentes */
+  .sug{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--r-sm);padding:8px 11px;box-shadow:var(--shadow)}
+  .sug .sh{font-size:10.5px;font-weight:750;letter-spacing:.05em;text-transform:uppercase;color:var(--accent-2);display:flex;align-items:center;gap:7px;margin-bottom:7px}
+  .sug .sh .cap{font-size:8.5px;background:var(--surface-3);color:var(--ink-faint);border-radius:100px;padding:2px 7px;letter-spacing:0;text-transform:none;font-weight:700}
+  .sline{display:flex;align-items:center;gap:8px}
+  .sline label{font-size:10px;color:var(--ink-soft);font-weight:600;white-space:nowrap}
+  .sline input{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:3px 5px;width:44px;text-align:right}
+  .sline input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .sval{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:18px;font-weight:800;color:var(--accent-2);margin-left:auto}
+  .apply{border:1px solid var(--accent);background:transparent;color:var(--accent-2);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--sans)}
+  .apply:hover{background:var(--accent);color:#fff}
+  .apply:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sfoot{font-size:8.5px;color:var(--ink-faint);margin-top:5px;line-height:1.38}
+  .sug.warn{border-left-color:var(--warn)} .sug.warn .sval{color:var(--warn)}
+  .sug.bad{border-left-color:var(--bad)} .sug.bad .sval{color:var(--bad)}
+  @media (max-width:1000px){
+    .calcgrid{grid-template-columns:1fr;grid-template-areas:"pais" "cli" "res" "sug"}
+    .rgrid,.rres,.sugrow{grid-template-columns:1fr}
+  }
   .explain{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 16px;box-shadow:var(--shadow)}
   .explain summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent-2);padding:12px 0;list-style:none}
   .explain summary::-webkit-details-marker{display:none}
@@ -444,102 +521,116 @@
     </section>
 
     <!-- 7 · CALCULADORA -->
-    <section class="slide" data-wide>
+    <section class="slide calcslide" data-wide>
       <div class="slide-inner">
         <div class="eyebrow">Calculadora en vivo</div>
         <h2>Simulá cualquier cliente y mirá si es rentable</h2>
-        <p class="lede">Simulá el <b>precio de venta</b> por país y la configuración del cliente. Los costos son los de la propuesta de Rumotech y no se editan. Cada dato explica abajo cómo se calcula.</p>
-        <div class="calc">
-          <!-- controles -->
-          <div style="display:flex;flex-direction:column;gap:16px">
-            <div class="panel">
-              <h4><span class="n">A</span> Precios de venta e impuestos por país</h4>
-              <div class="chips-sel" id="countrySel"></div>
-              <div class="field">
-                <label for="pais">País a simular</label>
-                <select id="pais">
-                  <option>Chile</option><option>Uruguay</option>
-                  <option selected>Argentina</option><option>Colombia</option><option>USA</option>
-                </select>
-              </div>
-              <table class="mods params">
-                <thead><tr><th>País</th><th>Precio venta</th><th>IVA&nbsp;%</th><th>IIBB&nbsp;%</th><th>Ganancias&nbsp;%</th></tr></thead>
-                <tbody id="paramsBody"></tbody>
-              </table>
-              <span class="hint">Marcá con los chips los países del ejercicio. <b>Simulá el precio de venta</b> por prestación (sin IVA) y las alícuotas de cada país. La fila resaltada es la que se simula.</span>
+        <div class="calcgrid">
+
+          <!-- A · país -->
+          <div class="panel a-pais">
+            <h4><span class="n">A</span> Precios de venta e impuestos por país</h4>
+            <div class="chips-sel" id="countrySel"></div>
+            <div class="field">
+              <label for="pais">País a simular</label>
+              <select id="pais">
+                <option>Chile</option><option>Uruguay</option>
+                <option selected>Argentina</option><option>Colombia</option><option>USA</option>
+              </select>
             </div>
-            <div class="panel">
-              <h4><span class="n">B</span> Configuración del cliente</h4>
-              <div class="two">
-                <div class="field"><label for="sedes">Número de sedes</label><input id="sedes" type="number" min="1" step="1" value="5"></div>
-                <div class="field"><label for="rmplan">Plan para RM</label><select id="rmplan"><option value="saas">SaaS Full + Cryogenics</option><option value="ebox">EBOX Full</option></select></div>
-              </div>
-              <div class="costbox">
-                <div class="cbk">Costos Rumotech · fijos, según la propuesta adjunta</div>
-                <div class="cbr" id="cbSaas">SaaS Full + Cryogenics — USD 1.200/modalidad/sede/año = <b>USD 100/mes</b> · HW USD 150/RM</div>
-                <div class="cbr" id="cbEbox">EBOX Full — USD 10.000/RM/año = <b>USD 833/mes por resonador</b> + USD 2.100/modalidad adicional/año = <b>USD 175/mes</b> · HW USD 500/RM</div>
-              </div>
-              <div class="seg" id="volMethod">
-                <button type="button" data-m="equipos" class="active">Volumen por equipos</button>
-                <button type="button" data-m="pacientes">Volumen por pacientes</button>
-              </div>
-              <table class="mods">
-                <thead><tr><th>Modalidad</th><th>Equipos/sede</th><th>Estudios/equipo/mes</th></tr></thead>
-                <tbody id="modsBody"></tbody>
-              </table>
-              <div id="patientBox" class="patient-box" hidden>
-                <div class="two">
-                  <div class="field"><label for="pac">Pacientes/mes por sede</label><input id="pac" type="number" min="0" step="10" value="900"></div>
-                  <div class="field"><label for="coef">Coef. exámenes/paciente</label><input id="coef" type="number" min="0" step="0.05" value="1.3"></div>
-                </div>
-                <span class="hint">Prestaciones por sede = pacientes × coeficiente = <b id="prestSede">—</b>. En este modo se ignora «Estudios/equipo/mes»; los equipos siguen definiendo las modalidades activas y el costo.</span>
-              </div>
+            <table class="mods params">
+              <thead><tr><th>País</th><th>Precio venta</th><th>IVA&nbsp;%</th><th>IIBB&nbsp;%</th><th>Gan.&nbsp;%</th></tr></thead>
+              <tbody id="paramsBody"></tbody>
+            </table>
+            <span class="hint">Chips = países del ejercicio. <b>Simulá el precio de venta</b> (sin IVA) y las alícuotas. La fila resaltada es la que se simula.</span>
+          </div>
+
+          <!-- B · cliente -->
+          <div class="panel a-cli">
+            <h4><span class="n">B</span> Configuración del cliente</h4>
+            <div class="two">
+              <div class="field"><label for="sedes">Sedes</label><input id="sedes" type="number" min="1" step="1" value="5"></div>
+              <div class="field"><label for="rmplan">Plan para RM</label><select id="rmplan"><option value="saas">SaaS Full + Cryogenics</option><option value="ebox">EBOX Full</option></select></div>
+            </div>
+            <table class="mods cli">
+              <thead><tr><th>Modalidad</th><th>Equipos</th><th>Pacientes</th><th>Coef.</th><th>Estudios/mes</th></tr></thead>
+              <tbody id="modsBody"></tbody>
+              <tfoot><tr><td>Total por sede</td><td id="tEq">—</td><td></td><td></td><td id="tVol">—</td></tr></tfoot>
+            </table>
+            <span class="hint">Estudios/mes por modalidad = (pacientes × coeficiente) × equipos. Pacientes es por equipo y por mes.</span>
+            <div class="costbox">
+              <div class="cbk">Costos Rumotech · fijos, del documento</div>
+              <div class="cbr" id="cbSaas">SaaS Full + Cryogenics — <b>USD 100/mes</b> por modalidad y sede · HW USD 150/RM</div>
+              <div class="cbr" id="cbEbox">EBOX Full — <b>USD 833/mes</b> por resonador + <b>USD 175/mes</b> por modalidad adicional · HW USD 500/RM</div>
             </div>
           </div>
-          <!-- resultados agrupados -->
-          <div class="out">
+
+          <!-- C · resultados (destacado) -->
+          <div class="resultcard">
             <div class="verdict" id="verdict">
               <span class="dot"></span>
               <div class="txt"><div class="st" id="vSt">—</div><div class="ds" id="vDs">—</div></div>
             </div>
-
-            <div class="ogroup">
-              <h5>1 · Precios de venta</h5>
-              <div class="orow"><div class="ol">Precio de venta / prestación<span class="of">Lo que le cobramos al centro por cada estudio, sin IVA. Es la palanca que simulás.</span></div><div class="ov" id="oPre">—</div></div>
-              <div class="orow"><div class="ol">IVA / prestación<span class="of" id="ofIvaU">—</span></div><div class="ov soft" id="oIvaU">—</div></div>
-              <div class="orow"><div class="ol">Precio facturado / prestación<span class="of">Precio de venta + IVA. Es lo que el cliente paga por cada estudio.</span></div><div class="ov" id="oPreIva">—</div></div>
+            <div class="rgrid">
+              <div class="ogroup">
+                <h5>1 · Precios de venta</h5>
+                <div class="orow"><div class="ol">Precio de venta / prestación<span class="of">Lo que cobramos al centro por estudio, sin IVA.</span></div><div class="ov" id="oPre">—</div></div>
+                <div class="orow"><div class="ol">IVA / prestación<span class="of" id="ofIvaU">—</span></div><div class="ov soft" id="oIvaU">—</div></div>
+                <div class="orow"><div class="ol">Precio facturado / prestación<span class="of">Precio + IVA: lo que paga el cliente.</span></div><div class="ov" id="oPreIva">—</div></div>
+              </div>
+              <div class="ogroup">
+                <h5>2 · Ingresos</h5>
+                <div class="orow"><div class="ol">Prestaciones / mes<span class="of" id="ofVol">—</span></div><div class="ov" id="oVol">—</div></div>
+                <div class="orow"><div class="ol">Ingreso bruto / mes<span class="of" id="ofIng">—</span></div><div class="ov" id="oIng">—</div></div>
+                <div class="orow"><div class="ol">Facturación total / mes (c/IVA)<span class="of" id="ofFact">—</span></div><div class="ov" id="oFact">—</div></div>
+              </div>
+              <div class="ogroup">
+                <h5>3 · Costos <span class="tagfix">fijos</span></h5>
+                <div class="orow"><div class="ol">Costo Rumotech / mes<span class="of" id="ofCosto">—</span></div><div class="ov" id="oCosto">—</div></div>
+                <div class="orow"><div class="ol">Costo efectivo / prestación<span class="of" id="ofCef">—</span></div><div class="ov" id="oCef">—</div></div>
+                <div class="orow"><div class="ol">Hardware (pago único)<span class="of" id="ofHW">—</span></div><div class="ov soft" id="oHW">—</div></div>
+              </div>
+              <div class="ogroup">
+                <h5>4 · Impuestos</h5>
+                <div class="orow"><div class="ol">IVA trasladado / mes<span class="of" id="ofIva">—</span></div><div class="ov soft" id="oIva">—</div></div>
+                <div class="orow"><div class="ol">Ingresos Brutos (IIBB) / mes<span class="of" id="ofIIBB">—</span></div><div class="ov" id="oIIBB">—</div></div>
+                <div class="orow"><div class="ol">Impuesto a las ganancias / mes<span class="of" id="ofGan">—</span></div><div class="ov" id="oGan">—</div></div>
+              </div>
             </div>
-
-            <div class="ogroup">
-              <h5>2 · Ingresos</h5>
-              <div class="orow"><div class="ol">Prestaciones / mes<span class="of" id="ofVol">—</span></div><div class="ov" id="oVol">—</div></div>
-              <div class="orow"><div class="ol">Ingreso bruto / mes<span class="of" id="ofIng">—</span></div><div class="ov" id="oIng">—</div></div>
-              <div class="orow"><div class="ol">Facturación total / mes (c/IVA)<span class="of" id="ofFact">—</span></div><div class="ov" id="oFact">—</div></div>
-            </div>
-
-            <div class="ogroup">
-              <h5>3 · Costos <span class="tagfix">fijos · del documento</span></h5>
-              <div class="orow"><div class="ol">Costo Rumotech / mes<span class="of" id="ofCosto">—</span></div><div class="ov" id="oCosto">—</div></div>
-              <div class="orow"><div class="ol">Costo efectivo / prestación<span class="of" id="ofCef">—</span></div><div class="ov" id="oCef">—</div></div>
-              <div class="orow"><div class="ol">Hardware (pago único)<span class="of" id="ofHW">—</span></div><div class="ov soft" id="oHW">—</div></div>
-            </div>
-
-            <div class="ogroup">
-              <h5>4 · Impuestos</h5>
-              <div class="orow"><div class="ol">IVA trasladado / mes<span class="of" id="ofIva">—</span></div><div class="ov soft" id="oIva">—</div></div>
-              <div class="orow"><div class="ol">Ingresos Brutos (IIBB) / mes<span class="of" id="ofIIBB">—</span></div><div class="ov" id="oIIBB">—</div></div>
-              <div class="orow"><div class="ol">Impuesto a las ganancias / mes<span class="of" id="ofGan">—</span></div><div class="ov" id="oGan">—</div></div>
-            </div>
-
             <div class="ogroup res">
               <h5>5 · Resultado</h5>
-              <div class="orow"><div class="ol">Margen bruto / mes<span class="of" id="ofBruto">—</span></div><div class="ov" id="oBruto">—</div></div>
-              <div class="orow big"><div class="ol">Ganancia neta / mes<span class="of" id="ofNeta">—</span></div><div class="ov" id="oNeta">—</div></div>
-              <div class="orow big"><div class="ol">Ganancia neta anual<span class="of">Ganancia neta mensual × 12. Es la renta pasiva que retiene NexoLibre por este cliente.</span></div><div class="ov" id="oAnual">—</div></div>
+              <div class="rres">
+                <div class="rstat"><div class="rk">Margen bruto / mes</div><div class="rv" id="oBruto">—</div><div class="rf" id="ofBruto">—</div></div>
+                <div class="rstat hi"><div class="rk">Ganancia neta / mes</div><div class="rv" id="oNeta">—</div><div class="rf" id="ofNeta">—</div></div>
+                <div class="rstat hi"><div class="rk">Ganancia neta anual</div><div class="rv" id="oAnual">—</div><div class="rf">Ganancia neta mensual × 12.</div></div>
+              </div>
             </div>
           </div>
+
+          <!-- D · sugerencias -->
+          <div class="sugrow">
+            <div class="sug" id="sugPCard">
+              <div class="sh">Precio de venta sugerido <span class="cap">tope $0,90</span></div>
+              <div class="sline">
+                <label for="tgtP">% ganancia objetivo</label>
+                <input id="tgtP" type="number" min="0" max="90" step="1" value="35">
+                <div class="sval" id="oSugP">—</div>
+                <button type="button" class="apply" id="applyP">Aplicar</button>
+              </div>
+              <div class="sfoot" id="ofSugP">—</div>
+            </div>
+            <div class="sug" id="sugCCard">
+              <div class="sh">Costo fijo sugerido <span class="cap">a negociar con Rumotech</span></div>
+              <div class="sline">
+                <label for="tgtC">% ganancia objetivo</label>
+                <input id="tgtC" type="number" min="0" max="90" step="1" value="35">
+                <div class="sval" id="oSugC">—</div>
+              </div>
+              <div class="sfoot" id="ofSugC">—</div>
+            </div>
+          </div>
+
         </div>
-        <p class="foot-note">Costos tomados de la propuesta Rumotech adjunta (no editables). Impuestos: el IVA se factura al cliente y se traslada al fisco (no afecta la ganancia); el IIBB se calcula sobre la <b>factura completa con IVA incluido</b>; el impuesto a las ganancias sobre el <b>margen (precio de venta − costo del servicio)</b>. Alícuotas, precios y volúmenes por defecto son estimaciones editables: validar con datos reales.</p>
       </div>
     </section>
 
@@ -651,13 +742,13 @@
   };
   var VISIBLE={Chile:true,Uruguay:true,Argentina:true,Colombia:true,USA:true};
   var MODS=[
-    {k:"RM",n:"Resonancia (RM)",eq:1,es:500},
-    {k:"CT",n:"Tomografía (CT)",eq:1,es:700},
-    {k:"US",n:"Ultrasonido (US)",eq:0,es:1000},
-    {k:"RX",n:"Rayos X (RX)",eq:0,es:1200},
-    {k:"MG",n:"Mamografía (MG)",eq:0,es:300}
+    {k:"RM",n:"Resonancia",eq:1,pac:400,cf:1.25},
+    {k:"CT",n:"Tomografía",eq:1,pac:560,cf:1.25},
+    {k:"US",n:"Ultrasonido",eq:0,pac:800,cf:1.25},
+    {k:"RX",n:"Rayos X",eq:0,pac:960,cf:1.25},
+    {k:"MG",n:"Mamografía",eq:0,pac:240,cf:1.25}
   ];
-  var volMode="equipos";
+  var CAP_PRICE=0.90, lastSugP=null;
   var $=function(id){return document.getElementById(id);};
   function num(id){var el=$(id);if(!el)return 0;var v=parseFloat(el.value);return isNaN(v)?0:v;}
   function money(n){return (n<0?"–":"")+"$"+Math.round(Math.abs(n)).toLocaleString("es-ES");}
@@ -670,7 +761,9 @@
   $("modsBody").innerHTML=MODS.map(function(m){
     return '<tr id="row-'+m.k+'"><td>'+m.n+'</td>'+
       '<td><input type="number" min="0" step="1" id="eq-'+m.k+'" value="'+m.eq+'"></td>'+
-      '<td><input type="number" min="0" step="10" id="es-'+m.k+'" value="'+m.es+'"></td></tr>';
+      '<td><input type="number" min="0" step="10" id="pac-'+m.k+'" value="'+m.pac+'"></td>'+
+      '<td><input type="number" min="0" step="0.05" id="cf-'+m.k+'" value="'+m.cf+'"></td>'+
+      '<td class="vol" id="vol-'+m.k+'">—</td></tr>';
   }).join("");
 
   $("paramsBody").innerHTML=ORDER.map(function(name){
@@ -710,9 +803,6 @@
     var ebox=$("rmplan").value==="ebox";
     $("cbSaas").classList.toggle("on",!ebox);
     $("cbEbox").classList.toggle("on",ebox);
-    $("patientBox").hidden=(volMode!=="pacientes");
-    MODS.forEach(function(m){var e=$("es-"+m.k); if(e) e.style.opacity=(volMode==="pacientes")?"0.4":"1";});
-    Array.prototype.forEach.call($("volMethod").children,function(b){b.classList.toggle("active",b.getAttribute("data-m")===volMode);});
   }
 
   function calc(){
@@ -724,10 +814,12 @@
     var sedes=Math.max(0,num("sedes"));
     var plan=$("rmplan").value, ebox=(plan==="ebox");
 
-    var activas=0, volEquipos=0, rmEq=0, costoSede=0, adic=0;
+    var activas=0, volSede=0, rmEq=0, costoSede=0, adic=0, eqTot=0;
     MODS.forEach(function(m){
-      var eq=num("eq-"+m.k), es=num("es-"+m.k), on=eq>0;
-      if(on){ activas++; volEquipos+=eq*es; }
+      var eq=num("eq-"+m.k), pac=num("pac-"+m.k), cf=num("cf-"+m.k);
+      var vol=pac*cf*eq, on=eq>0;                       // (pacientes × coeficiente) × equipos
+      var vc=$("vol-"+m.k); if(vc) vc.textContent=Math.round(vol).toLocaleString("es-ES");
+      if(on){ activas++; volSede+=vol; eqTot+=eq; }
       if(m.k==="RM") rmEq=eq;
       if(on){
         if(m.k==="RM") costoSede += ebox ? COST.eboxRMMes*eq : COST.saasModMes;
@@ -736,10 +828,8 @@
       var row=$("row-"+m.k); if(row) row.classList.toggle("dim",!on);
     });
     ORDER.forEach(function(n){var pr=$("prow-"+n); if(pr) pr.classList.toggle("active",n===active);});
-
-    var pac=num("pac"), coef=num("coef");
-    if(volMode==="pacientes"){var ps=$("prestSede"); if(ps) ps.textContent=Math.round(pac*coef).toLocaleString("es-ES")+" prest./sede";}
-    var volSede=(volMode==="pacientes")?pac*coef:volEquipos;
+    $("tEq").textContent=eqTot;
+    $("tVol").textContent=Math.round(volSede).toLocaleString("es-ES");
 
     var volTot=volSede*sedes;
     var costoTot=costoSede*sedes;
@@ -763,41 +853,92 @@
     /* 1 · precios */
     $("oPre").textContent=money2(precio);
     $("oIvaU").textContent=money2(ivaU);
-    $("ofIvaU").textContent="Precio de venta "+money2(precio)+" × IVA "+c.iva+"%. Se le suma al cliente en la factura y se traslada al fisco.";
+    $("ofIvaU").textContent=money2(precio)+" × IVA "+c.iva+"%. Se traslada al fisco.";
     $("oPreIva").textContent=money2(preIva);
     /* 2 · ingresos */
     $("oVol").textContent=Math.round(volTot).toLocaleString("es-ES");
-    $("ofVol").textContent=(volMode==="pacientes"
-      ? "Pacientes "+Math.round(pac)+" × coeficiente "+coef+" = "+Math.round(volSede)+" por sede"
-      : "Suma de equipos × estudios/equipo = "+Math.round(volSede)+" por sede")+" × "+sedes+" sedes.";
+    $("ofVol").textContent=Math.round(volSede).toLocaleString("es-ES")+" por sede × "+sedes+" sedes.";
     $("oIng").textContent=money(ingBruto);
-    $("ofIng").textContent=Math.round(volTot).toLocaleString("es-ES")+" prestaciones × "+money2(precio)+" (sin IVA). Es facturación antes de costos e impuestos: no es ganancia.";
+    $("ofIng").textContent=Math.round(volTot).toLocaleString("es-ES")+" × "+money2(precio)+" (sin IVA). Antes de costos: no es ganancia.";
     $("oFact").textContent=money(factura);
-    $("ofFact").textContent="Ingreso bruto "+money(ingBruto)+" + IVA "+money(ivaAmt)+". Es el total que se le cobra al cliente y la base del IIBB.";
+    $("ofFact").textContent=money(ingBruto)+" + IVA "+money(ivaAmt)+". Es la base del IIBB.";
     /* 3 · costos */
     $("oCosto").textContent=money(costoTot);
     $("ofCosto").textContent=ebox
-      ? "EBOX Full: "+rmEq+" RM × $833/mes"+(adic>0?" + "+adic+" modalidad(es) adicional(es) × $175/mes":"")+", × "+sedes+" sedes. Fijo según la propuesta."
-      : "SaaS Full + Cryogenics: "+activas+" modalidad(es) × $100/mes × "+sedes+" sedes. Se cobra por modalidad y sede, no por equipo. Fijo según la propuesta.";
+      ? rmEq+" RM × $833"+(adic>0?" + "+adic+" mod. × $175":"")+", × "+sedes+" sedes. Fijo (documento)."
+      : activas+" modalidad(es) × $100 × "+sedes+" sedes. Por modalidad y sede, no por equipo.";
     $("oCef").textContent=money2(cef);
-    $("ofCef").textContent="Costo "+money(costoTot)+" ÷ "+Math.round(volTot).toLocaleString("es-ES")+" prestaciones. Baja al sumar equipos o sedes: la densidad diluye el costo fijo.";
+    $("ofCef").textContent=money(costoTot)+" ÷ "+Math.round(volTot).toLocaleString("es-ES")+" prest. Baja con la densidad.";
     $("oHW").textContent=money(hwTot);
-    $("ofHW").textContent=(ebox?"USD 500":"USD 150")+" × "+rmEq+" RM × "+sedes+" sedes ("+(ebox?"EBOX Full":"Cryogenics")+"). Pago único: no entra en la ganancia recurrente.";
+    $("ofHW").textContent=(ebox?"$500":"$150")+" × "+rmEq+" RM × "+sedes+" sedes. Pago único.";
     /* 4 · impuestos */
     $("oIva").textContent=money(ivaAmt);
-    $("ofIva").textContent="Ingreso bruto × IVA "+c.iva+"%. Lo paga el cliente y se traslada al fisco: no afecta nuestra ganancia.";
+    $("ofIva").textContent=money(ingBruto)+" × "+c.iva+"%. Lo paga el cliente: no afecta la ganancia.";
     $("oIIBB").textContent=iibb>0?money(iibbAmt):"—";
     $("ofIIBB").textContent=iibb>0
-      ? "Factura completa "+money(factura)+" (precio + IVA) × "+c.iibb+"%. Se aplica sobre la factura con IVA incluido. Sí es costo nuestro."
-      : "No aplica en "+active+". En Argentina se calcula sobre la factura completa (precio + IVA).";
+      ? "Factura "+money(factura)+" (precio + IVA) × "+c.iibb+"%. Sobre la factura c/IVA. Es costo nuestro."
+      : "No aplica en "+active+".";
     $("oGan").textContent=money(ganAmt);
-    $("ofGan").textContent="Margen bruto "+money(margenBruto)+" × "+c.tax+"%. Se calcula sobre el margen: precio de venta − costo del servicio.";
+    $("ofGan").textContent="Margen bruto "+money(margenBruto)+" × "+c.tax+"% (precio − costo).";
     /* 5 · resultado */
     $("oBruto").textContent=money(margenBruto);
-    $("ofBruto").textContent="Ingreso bruto "+money(ingBruto)+" − costo Rumotech "+money(costoTot)+". Antes de impuestos.";
+    $("ofBruto").textContent=money(ingBruto)+" − "+money(costoTot)+" de costo. Antes de impuestos.";
     $("oNeta").textContent=money(neta);
-    $("ofNeta").textContent="Margen bruto "+money(margenBruto)+" − IIBB "+money(iibbAmt)+" − ganancias "+money(ganAmt)+".";
+    $("ofNeta").textContent=money(margenBruto)+" − IIBB "+money(iibbAmt)+" − gan. "+money(ganAmt)+".";
     $("oAnual").textContent=money(netaAnual);
+
+    /* ---------- sugerencias ----------
+       margen neto m = [(1−t) − (1+iva)·iibb] − costo·(1−t)/ingreso
+       K = (1−t) − (1+iva)·iibb  →  techo teórico de margen              */
+    function margenAt(P){
+      var ib=volTot*P; if(ib<=0) return -1;
+      var mb=ib-costoTot, ii=ib*(1+iva)*iibb, gg=mb>0?mb*tax:0;
+      return (mb-ii-gg)/ib;
+    }
+    var K=(1-tax)-(1+iva)*iibb;
+    var mP=Math.max(0,Math.min(0.95,num("tgtP")/100));
+    var cardP=$("sugPCard"); cardP.classList.remove("warn","bad");
+    var denP=K-mP;
+    if(volTot<=0||costoTot<=0){
+      lastSugP=null; $("oSugP").textContent="—";
+      $("ofSugP").textContent="Configurá al menos una modalidad con equipos y pacientes.";
+    }else if(denP<=0){
+      lastSugP=null; cardP.classList.add("bad"); $("oSugP").textContent="—";
+      $("ofSugP").textContent="Con las alícuotas de "+active+" el techo de ganancia es "+Math.round(K*100)+"%: el objetivo de "+Math.round(mP*100)+"% no se alcanza a ningún precio.";
+    }else{
+      var ingNec=costoTot*(1-tax)/denP, pNec=ingNec/volTot;
+      lastSugP=Math.min(pNec,CAP_PRICE);
+      $("oSugP").textContent=money2(lastSugP);
+      if(pNec>CAP_PRICE){
+        cardP.classList.add("warn");
+        $("ofSugP").textContent="Para "+Math.round(mP*100)+"% harían falta "+money2(pNec)+", por encima del tope de $0,90. A $0,90 la ganancia alcanzable es "+Math.round(margenAt(CAP_PRICE)*100)+"%. Bajá el objetivo o sumá volumen.";
+      }else{
+        $("ofSugP").textContent="Precio por prestación para lograr "+Math.round(mP*100)+"% de ganancia neta con esta configuración. Requiere un ingreso bruto de "+money(ingNec)+"/mes.";
+      }
+    }
+
+    var mC=Math.max(0,Math.min(0.95,num("tgtC")/100));
+    var cardC=$("sugCCard"); cardC.classList.remove("warn","bad");
+    var unidades=activas*sedes;
+    if(ingBruto<=0||unidades<=0){
+      $("oSugC").textContent="—";
+      $("ofSugC").textContent="Configurá el cliente y el precio de venta para calcular el costo objetivo.";
+    }else{
+      var costoMax=ingBruto*(K-mC)/(1-tax);
+      if(costoMax<=0){
+        cardC.classList.add("bad"); $("oSugC").textContent="—";
+        $("ofSugC").textContent="A "+money2(precio)+" por prestación, "+Math.round(mC*100)+"% de ganancia no se alcanza ni con costo cero. Subí el precio de venta.";
+      }else{
+        $("oSugC").textContent=money(costoMax);
+        var porUnidad=costoMax/unidades;
+        if(costoMax>=costoTot){
+          $("ofSugC").textContent="Costo máximo mensual para "+Math.round(mC*100)+"% de ganancia a "+money2(precio)+"/prestación. El costo actual ("+money(costoTot)+") ya está por debajo: el objetivo se cumple.";
+        }else{
+          cardC.classList.add("warn");
+          $("ofSugC").textContent="Costo máximo mensual para "+Math.round(mC*100)+"% de ganancia a "+money2(precio)+"/prestación. Hoy pagamos "+money(costoTot)+": habría que negociar con Rumotech hasta "+money(porUnidad)+" por modalidad y sede.";
+        }
+      }
+    }
 
     var v=$("verdict"), stt=$("vSt"), ds=$("vDs");
     v.classList.remove("good","warn","bad");
@@ -820,14 +961,20 @@
   $("pais").addEventListener("change",calc);
   $("sedes").addEventListener("input",calc);
   $("rmplan").addEventListener("change",calc);
-  $("pac").addEventListener("input",calc);
-  $("coef").addEventListener("input",calc);
+  $("tgtP").addEventListener("input",calc);
+  $("tgtC").addEventListener("input",calc);
+  $("applyP").addEventListener("click",function(){
+    if(lastSugP==null)return;
+    var el=$("p-price-"+$("pais").value);
+    if(el){ el.value=lastSugP.toFixed(2); calc(); }
+  });
   ORDER.forEach(function(name){
     ["p-price-","p-iva-","p-iibb-","p-tax-"].forEach(function(pfx){$(pfx+name).addEventListener("input",calc);});
     $("chk-"+name).addEventListener("change",function(){VISIBLE[name]=this.checked;calc();});
   });
-  MODS.forEach(function(m){$("eq-"+m.k).addEventListener("input",calc);$("es-"+m.k).addEventListener("input",calc);});
-  Array.prototype.forEach.call($("volMethod").children,function(b){b.addEventListener("click",function(){volMode=b.getAttribute("data-m");calc();});});
+  MODS.forEach(function(m){
+    ["eq-","pac-","cf-"].forEach(function(pfx){$(pfx+m.k).addEventListener("input",calc);});
+  });
   calc();
 })();
 </script>
